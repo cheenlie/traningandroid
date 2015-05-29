@@ -32,6 +32,7 @@ public final class R {
         public static final int share_button=0x7f020007;
     }
     public static final class id {
+        public static final int child_head=0x7f070018;
         public static final int gridlayout=0x7f070004;
         public static final int huor10=0x7f070009;
         public static final int huor11=0x7f07000a;
@@ -51,12 +52,12 @@ public final class R {
         public static final int huor7=0x7f070006;
         public static final int huor8=0x7f070007;
         public static final int huor9=0x7f070008;
-        public static final int imageView1=0x7f070019;
+        public static final int imageView1=0x7f07001a;
         public static final int ll_week=0x7f070002;
         public static final int main_flipper_day=0x7f070001;
-        public static final int main_right_tx=0x7f07001a;
+        public static final int main_right_tx=0x7f07001b;
         public static final int main_share_button=0x7f070017;
-        public static final int main_title_spinner=0x7f070018;
+        public static final int main_title_spinner=0x7f070019;
         public static final int relativelayout_main_all=0x7f070000;
         public static final int scrollView1=0x7f070003;
     }

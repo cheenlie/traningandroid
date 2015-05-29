@@ -1,11 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="50dp"
     android:background="#f2fcff"
-    android:gravity="center_vertical">"
-    
- <TextView
+    android:gravity="center_vertical" >
+
+    <com.course.util.CircularImage
+        android:id="@+id/child_head"
+         android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="5dp"
+        android:src="@drawable/logo_little" />
+    <TextView
         android:id="@+id/main_title_spinner"
         android:layout_width="wrap_content"
         android:layout_height="30dp"
@@ -14,7 +22,7 @@
         android:text="TextView"
         android:textColor="#2370aa"
         android:textSize="18sp" />
- 
+
     <ImageView
         android:id="@+id/imageView1"
         android:layout_width="18dp"
@@ -38,4 +46,5 @@
         android:layout_height="0.3dp"
         android:layout_alignParentBottom="true"
         android:background="#777" />
-</LinearLayout>
+
+</RelativeLayout>
