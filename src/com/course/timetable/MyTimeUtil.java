@@ -1,4 +1,4 @@
-﻿package com.course.util;
+﻿package com.course.timetable;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
