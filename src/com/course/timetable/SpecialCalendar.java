@@ -1,4 +1,4 @@
-package com.course.timetable;
+ï»¿package com.course.timetable;
 
 import java.util.Calendar;
 
@@ -6,13 +6,13 @@ import android.R.integer;
 
 public class SpecialCalendar {
 
-	private int daysOfMonth = 0;      //Ä³ÔÂµÄÌìÊı
-	private int dayOfWeek = 0;        //¾ßÌåÄ³Ò»ÌìÊÇĞÇÆÚ¼¸
+	private int daysOfMonth = 0;      //æŸæœˆçš„å¤©æ•°
+	private int dayOfWeek = 0;        //å…·ä½“æŸä¸€å¤©æ˜¯æ˜ŸæœŸå‡ 
 	private int eachDayOfWeek = 0;
 	
 	
 	
-	// ÅĞ¶ÏÊÇ·ñÎªÈòÄê
+	// åˆ¤æ–­æ˜¯å¦ä¸ºé—°å¹´
 	public boolean isLeapYear(int year) {
 		if (year % 100 == 0 && year % 400 == 0) {
 			return true;
@@ -22,7 +22,7 @@ public class SpecialCalendar {
 		return false;
 	}
 
-	//µÃµ½Ä³ÔÂÓĞ¶àÉÙÌìÊı
+	//å¾—åˆ°æŸæœˆæœ‰å¤šå°‘å¤©æ•°
 	public int getDaysOfMonth(boolean isLeapyear, int month) {
 		switch (month) {
 		case 1:
@@ -51,7 +51,7 @@ public class SpecialCalendar {
 		return daysOfMonth;
 	}
 	
-	//Ö¸¶¨Ä³ÄêÖĞµÄÄ³ÔÂµÄµÚÒ»ÌìÊÇĞÇÆÚ¼¸
+	//æŒ‡å®šæŸå¹´ä¸­çš„æŸæœˆçš„ç¬¬ä¸€å¤©æ˜¯æ˜ŸæœŸå‡ 
 	public int getWeekdayOfMonth(int year, int month){
 		Calendar cal = Calendar.getInstance();
 		cal.set(year, month-1, 1);

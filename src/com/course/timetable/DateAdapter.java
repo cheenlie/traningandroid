@@ -1,4 +1,4 @@
-package com.course.timetable;
+ï»¿package com.course.timetable;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -24,12 +24,12 @@ import android.widget.TextView;
 
 public class DateAdapter extends BaseAdapter {
 	private static String TAG = "ZzL";
-	private boolean isLeapyear = false; // ÊÇ·ñÎªÈòÄê
-	private int daysOfMonth = 0; // Ä³ÔÂµÄÌìÊı
-	private int dayOfWeek = 0; // ¾ßÌåÄ³Ò»ÌìÊÇĞÇÆÚ¼¸
+	private boolean isLeapyear = false; // æ˜¯å¦ä¸ºé—°å¹´
+	private int daysOfMonth = 0; // æŸæœˆçš„å¤©æ•°
+	private int dayOfWeek = 0; // å…·ä½“æŸä¸€å¤©æ˜¯æ˜ŸæœŸå‡ 
 	private int nextDayOfWeek = 0;
 	private int lastDayOfWeek = 0;
-	private int lastDaysOfMonth = 0; // ÉÏÒ»¸öÔÂµÄ×ÜÌìÊı
+	private int lastDaysOfMonth = 0; // ä¸Šä¸€ä¸ªæœˆçš„æ€»å¤©æ•°
 	private int eachDayOfWeek = 0;
 	private Context context;
 	private SpecialCalendar sc = null;
@@ -37,8 +37,8 @@ public class DateAdapter extends BaseAdapter {
 	private Drawable drawable = null;
 	private String[] dayNumber = new String[7];
 	private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-M-d");
-	private int currentFlag = -1; // ÓÃÓÚ±ê¼Çµ±Ìì
-	// ÏµÍ³µ±Ç°Ê±¼ä
+	private int currentFlag = -1; // ç”¨äºæ ‡è®°å½“å¤©
+	// ç³»ç»Ÿå½“å‰æ—¶é—´
 	private String sysDate = "";
 	private String sys_year = "";
 	private String sys_month = "";
@@ -59,14 +59,14 @@ public class DateAdapter extends BaseAdapter {
 	private int n_day_week = 0;
 	private boolean isStart;
 
-	// ±êÊ¶Ñ¡ÔñµÄItem
+	// æ ‡è¯†é€‰æ‹©çš„Item
 	public void setSeclection(int position) {
 		clickTemp = position;
 	}
 
 	public DateAdapter() {
 		Date date = new Date();
-		sysDate = sdf.format(date); // µ±ÆÚÈÕÆÚ
+		sysDate = sdf.format(date); // å½“æœŸæ—¥æœŸ
 		sys_year = sysDate.split("-")[0];
 		sys_month = sysDate.split("-")[1];
 		sys_day = sysDate.split("-")[2];
@@ -87,10 +87,10 @@ public class DateAdapter extends BaseAdapter {
 				sc.getDaysOfMonth(sc.isLeapYear(year_c), month_c));
 		Log.i(TAG, "week_c:" + week_c);
 		currentYear = String.valueOf(year_c);
-		; // µÃµ½µ±Ç°µÄÄê·İ
-		currentMonth = String.valueOf(month_c); // µÃµ½±¾ÔÂ
-		// £¨jumpMonthÎª»¬¶¯µÄ´ÎÊı£¬Ã¿»¬¶¯Ò»´Î¾ÍÔö¼ÓÒ»ÔÂ»ò¼õÒ»ÔÂ£©
-		currentDay = String.valueOf(sys_day); // µÃµ½µ±Ç°ÈÕÆÚÊÇÄÄÌì
+		; // å¾—åˆ°å½“å‰çš„å¹´ä»½
+		currentMonth = String.valueOf(month_c); // å¾—åˆ°æœ¬æœˆ
+		// ï¼ˆjumpMonthä¸ºæ»‘åŠ¨çš„æ¬¡æ•°ï¼Œæ¯æ»‘åŠ¨ä¸€æ¬¡å°±å¢åŠ ä¸€æœˆæˆ–å‡ä¸€æœˆï¼‰
+		currentDay = String.valueOf(sys_day); // å¾—åˆ°å½“å‰æ—¥æœŸæ˜¯å“ªå¤©
 		getCalendar(Integer.parseInt(currentYear),
 				Integer.parseInt(currentMonth));
 		currentWeek = String.valueOf(week_c);
@@ -151,9 +151,9 @@ public class DateAdapter extends BaseAdapter {
 	}
 
 	public void getCalendar(int year, int month) {
-		isLeapyear = sc.isLeapYear(year); // ÊÇ·ñÎªÈòÄê
-		daysOfMonth = sc.getDaysOfMonth(isLeapyear, month); // Ä³ÔÂµÄ×ÜÌìÊı
-		dayOfWeek = sc.getWeekdayOfMonth(year, month); // Ä³ÔÂµÚÒ»ÌìÎªĞÇÆÚ¼¸
+		isLeapyear = sc.isLeapYear(year); // æ˜¯å¦ä¸ºé—°å¹´
+		daysOfMonth = sc.getDaysOfMonth(isLeapyear, month); // æŸæœˆçš„æ€»å¤©æ•°
+		dayOfWeek = sc.getWeekdayOfMonth(year, month); // æŸæœˆç¬¬ä¸€å¤©ä¸ºæ˜ŸæœŸå‡ 
 		lastDaysOfMonth = sc.getDaysOfMonth(isLeapyear, month - 1);
 		nextDayOfWeek = sc.getDaysOfMonth(isLeapyear, month + 1);
 	}
@@ -184,7 +184,7 @@ public class DateAdapter extends BaseAdapter {
 	}
 
 	/**
-	 * µÃµ½Ä³ÔÂÓĞ¼¸ÖÜ(ÌØÊâËã·¨)
+	 * å¾—åˆ°æŸæœˆæœ‰å‡ å‘¨(ç‰¹æ®Šç®—æ³•)
 	 */
 	public int getWeeksOfMonth() {
 		// getCalendar(year, month);
@@ -201,7 +201,7 @@ public class DateAdapter extends BaseAdapter {
 	}
 
 	/**
-	 * Ä³Ò»ÌìÔÚµÚ¼¸ÖÜ
+	 * æŸä¸€å¤©åœ¨ç¬¬å‡ å‘¨
 	 */
 	public void getDayInWeek(int year, int month) {
 

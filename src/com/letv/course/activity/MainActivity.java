@@ -60,15 +60,15 @@ public class MainActivity extends Activity implements OnGestureListener {
 	private int currentWeek;
 	private int currentNum;
 
-	private int daysOfMonth = 0; // ĳ�µ�����
-	private int dayOfWeek = 0; // ����ĳһ�������ڼ�
+	private int daysOfMonth = 0; 
+	private int dayOfWeek = 0; 
 	private int weeksOfMonth = 0;
-	private boolean isLeapyear = false; // �Ƿ�Ϊ����
+	private boolean isLeapyear = false; 
 	private int selectPostion = 0;
 	private String dayNumbers[] = new String[7];
 
 	private SpecialCalendar sc = null;
-	private DateAdapter dateAdapter; // ʵ����Ļ���л�Ч��
+	private DateAdapter dateAdapter; 
 	private RelativeLayout relativelayout_main_all;
 	private GestureDetector gestureDetector=null;
 
@@ -102,8 +102,6 @@ public class MainActivity extends Activity implements OnGestureListener {
 		gridView.setSelector(new ColorDrawable(Color.TRANSPARENT));
 		gridView.setVerticalSpacing(1);
 		gridView.setHorizontalSpacing(1);
-		
-		
 		gridView.setLayoutParams(params);
 		
 	}
@@ -122,12 +120,11 @@ public class MainActivity extends Activity implements OnGestureListener {
 
 	}
 
-	public class TextViewClickEvent implements
-			android.view.View.OnClickListener {
-
+	public class TextViewClickEvent implements	android.view.View.OnClickListener {
+		
 		@Override
 		public void onClick(View arg0) {
-
+			final DatePickerDialog datePickerDialog;
 			Calendar calendar = Calendar.getInstance();
 			SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy.MM.dd");
 			Date date = null;
@@ -135,18 +132,17 @@ public class MainActivity extends Activity implements OnGestureListener {
 			try {
 				date = simpleDateFormat.parse(MyTimeUtil.getDateOfWeekAndDay(week, 3));
 			} catch (ParseException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 
 			calendar.setTime(date);
-
-			final DatePickerDialog datePickerDialog;
-			datePickerDialog = new DatePickerDialog(MainActivity.this,
-					new DatePickerDialog.OnDateSetListener() {
+			datePickerDialog = new DatePickerDialog(MainActivity.this,	new DatePickerDialog.OnDateSetListener() {
 
 						@Override
 						public void onDateSet(DatePicker arg0, int year,int month, int dayofMonth) {
+							Date date = null;
+							SimpleDateFormat format = new SimpleDateFormat(	"yyyy.MM.dd");
+							SimpleDateFormat sdf = new SimpleDateFormat("yyyy-M-d");
 							month = month + 1;
 							String monthStr = "" + month;
 							String dayofMonthStr = "" + dayofMonth;
@@ -157,20 +153,16 @@ public class MainActivity extends Activity implements OnGestureListener {
 								dayofMonthStr = "0" + dayofMonth;
 							}
 							String dateSelectStr = (year + "." + monthStr + "." + dayofMonthStr);
+							
 							week = MyTimeUtil.getWeeks(dateSelectStr);
-							main_topbar_spinner.setText(MyTimeUtil
-									.getTheWeekStrMonthAndDay(week));
-							// updategvidlayout(week, grid);
-							SimpleDateFormat format = new SimpleDateFormat(	"yyyy.MM.dd");
-							Date date = null;
+							main_topbar_spinner.setText(MyTimeUtil.getTheWeekStrMonthAndDay(week));
+//							updategvidlayout(week, grid);
+							
 							try {
 								date = format.parse(dateSelectStr);
 							} catch (ParseException e) {
-								// TODO Auto-generated catch block
 								e.printStackTrace();
 							}
-							SimpleDateFormat sdf = new SimpleDateFormat(
-									"yyyy-M-d");
 							currentDate = sdf.format(date);
 							year_c = Integer.parseInt(currentDate.split("-")[0]);
 							month_c = Integer.parseInt(currentDate.split("-")[1]);
@@ -178,8 +170,8 @@ public class MainActivity extends Activity implements OnGestureListener {
 							currentYear = year_c;
 							currentMonth = month_c;
 							sc = new SpecialCalendar();
-							// getCalendar(year_c, month_c);
-							// week_num = getWeeksOfMonth();
+							getCalendar(year_c, month_c);
+							week_num = getWeeksOfMonth();
 							currentNum = week_num;
 							if (dayOfWeek == 7) {
 								week_c = day_c / 7 + 1;
@@ -195,28 +187,18 @@ public class MainActivity extends Activity implements OnGestureListener {
 								}
 							}
 							currentWeek = week_c;
-							Log.e(TAG + "currentWeek",String.valueOf(currentWeek));
-							// getCurrent();
-							dateAdapter = new DateAdapter(MainActivity.this,
-									getResources(), currentYear, currentMonth,
-									currentWeek, currentNum, selectPostion,
-									currentWeek == 1 ? true : false);
+							getCurrent();
+							dateAdapter = new DateAdapter(MainActivity.this,getResources(), currentYear, currentMonth,currentWeek, currentNum, selectPostion,currentWeek == 1 ? true : false);
 							flipper1.removeViewAt(0);
-							// addGridView();
+						    addGridView();
 							dayNumbers = dateAdapter.getDayNumbers();
 							gridView.setAdapter(dateAdapter);
-							/*
-							 * selectPostion = dateAdapter.getTodayPosition();
-							 * gridView.setSelection(selectPostion);
-							 */
 							Calendar c111 = Calendar.getInstance();
-							if (c111.get(Calendar.YEAR) == dateAdapter
-									.getCurrentYear(selectPostion)
-									&& (c111.get(Calendar.MONTH) + 1) == dateAdapter
-											.getCurrentMonth(selectPostion)
-									&& c111.get(Calendar.DAY_OF_MONTH) == Integer
-											.parseInt(dayNumbers[selectPostion])) {
-								dateAdapter.setSeclection(selectPostion);  //ʵ�����ڲ��л�Ч�������л��ĵط�
+							if (c111.get(Calendar.YEAR) == dateAdapter.getCurrentYear(selectPostion)
+									&& (c111.get(Calendar.MONTH) + 1) == dateAdapter.getCurrentMonth(selectPostion)
+									&& c111.get(Calendar.DAY_OF_MONTH) == Integer.parseInt(dayNumbers[selectPostion])) 
+							{
+								dateAdapter.setSeclection(selectPostion); 
 							}
 							flipper1.addView(gridView, 0);
 						}
@@ -226,18 +208,124 @@ public class MainActivity extends Activity implements OnGestureListener {
 
 				public void onShow(DialogInterface arg0) {
 					InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-					imm.hideSoftInputFromWindow(datePickerDialog
-							.getCurrentFocus().getWindowToken(),
-							InputMethodManager.HIDE_NOT_ALWAYS);
+					imm.hideSoftInputFromWindow(datePickerDialog.getCurrentFocus().getWindowToken(),InputMethodManager.HIDE_NOT_ALWAYS);
 				}
 			});
-
 			datePickerDialog.show();
+		}
+	}
+	
+	public void getCalendar(int year, int month) {
+		isLeapyear = sc.isLeapYear(year); // 是否为闰年
+		daysOfMonth = sc.getDaysOfMonth(isLeapyear, month); // 某月的总天数
+		dayOfWeek = sc.getWeekdayOfMonth(year, month); // 某月第一天为星期几
+	}
+	
+	public int getWeeksOfMonth() {
+		// getCalendar(year, month);
+		int preMonthRelax = 0;
+		if (dayOfWeek != 7) {
+			preMonthRelax = dayOfWeek;
+		}
+		if ((daysOfMonth + preMonthRelax) % 7 == 0) {
+			weeksOfMonth = (daysOfMonth + preMonthRelax) / 7;
+		} else {
+			weeksOfMonth = (daysOfMonth + preMonthRelax) / 7 + 1;
+		}
+		return weeksOfMonth;
+	}
+	
+	/**
+	 * 判断某年某月所有的星期数
+	 * 
+	 * @param year
+	 * @param month
+	 */
+	public int getWeeksOfMonth(int year, int month) {
+		// 先判断某月的第一天为星期几
+		int preMonthRelax = 0;
+		int dayFirst = getWhichDayOfWeek(year, month);
+		int days = sc.getDaysOfMonth(sc.isLeapYear(year), month);
+		if (dayFirst != 7) {
+			preMonthRelax = dayFirst;
+		}
+		if ((days + preMonthRelax) % 7 == 0) {
+			weeksOfMonth = (days + preMonthRelax) / 7;
+		} else {
+			weeksOfMonth = (days + preMonthRelax) / 7 + 1;
+		}
+		return weeksOfMonth;
 
+	}
+	
+	/**
+	 * 判断某年某月的第一天为星期几
+	 * 
+	 * @param year
+	 * @param month
+	 * @return
+	 */
+	public int getWhichDayOfWeek(int year, int month) {
+		return sc.getWeekdayOfMonth(year, month);
+	}
+	
+	/**
+	 * 重新计算当前的年月
+	 */
+	public void getCurrent() {
+		if (currentWeek > currentNum) {
+			if (currentMonth + 1 <= 12) {
+				currentMonth++;
+			} else {
+				currentMonth = 1;
+				currentYear++;
+			}
+			currentWeek = 1;
+			currentNum = getWeeksOfMonth(currentYear, currentMonth);
+		} else if (currentWeek == currentNum) {
+			if (getLastDayOfWeek(currentYear, currentMonth) == 6) {
+			} else {
+				if (currentMonth + 1 <= 12) {
+					currentMonth++;
+				} else {
+					currentMonth = 1;
+					currentYear++;
+				}
+				currentWeek = 1;
+				currentNum = getWeeksOfMonth(currentYear, currentMonth);
+			}
+
+		} else if (currentWeek < 1) {
+			if (currentMonth - 1 >= 1) {
+				currentMonth--;
+			} else {
+				currentMonth = 12;
+				currentYear--;
+			}
+			currentNum = getWeeksOfMonth(currentYear, currentMonth);
+			int firstDayOfWeek = sc.getWeekdayOfMonth(currentYear,
+					currentMonth + 1);
+			if (firstDayOfWeek == 0) {
+				// 如果上月第一天是星期日:0,则当前周变成上个月最后一周 =currentNum
+				currentWeek = currentNum;
+			} else {
+				currentWeek = currentNum - 1;
+			}
 		}
 
 	}
+	
+	/**
+	 * 
+	 * @param year
+	 * @param month
+	 */
+	public int getLastDayOfWeek(int year, int month) {
+		return sc.getWeekDayOfLastMonth(year, month,
+				sc.getDaysOfMonth(isLeapyear, month));
+	}
 
+	
 	/**
 	 * onDown -> onSingleTapUp 方法都是继承自OnGestureListener 
 	 */
