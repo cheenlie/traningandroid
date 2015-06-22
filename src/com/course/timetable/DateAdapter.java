@@ -83,19 +83,16 @@ public class DateAdapter extends BaseAdapter {
 		this.isStart = isStart;
 		sc = new SpecialCalendar();
 
-		lastDayOfWeek = sc.getWeekDayOfLastMonth(year_c, month_c,
-				sc.getDaysOfMonth(sc.isLeapYear(year_c), month_c));
+		lastDayOfWeek = sc.getWeekDayOfLastMonth(year_c, month_c,sc.getDaysOfMonth(sc.isLeapYear(year_c), month_c));
 		Log.i(TAG, "week_c:" + week_c);
 		currentYear = String.valueOf(year_c);
 		; // 得到当前的年份
 		currentMonth = String.valueOf(month_c); // 得到本月
 		// （jumpMonth为滑动的次数，每滑动一次就增加一月或减一月）
 		currentDay = String.valueOf(sys_day); // 得到当前日期是哪天
-		getCalendar(Integer.parseInt(currentYear),
-				Integer.parseInt(currentMonth));
+		getCalendar(Integer.parseInt(currentYear),Integer.parseInt(currentMonth));
 		currentWeek = String.valueOf(week_c);
-		getWeek(Integer.parseInt(currentYear), Integer.parseInt(currentMonth),
-				Integer.parseInt(currentWeek));
+		getWeek(Integer.parseInt(currentYear), Integer.parseInt(currentMonth),Integer.parseInt(currentWeek));
 
 	}
 
@@ -165,14 +162,12 @@ public class DateAdapter extends BaseAdapter {
 			} else {
 				if (week == 1) {
 					if (i < dayOfWeek) {
-						dayNumber[i] = String.valueOf(lastDaysOfMonth
-								- (dayOfWeek - (i + 1)));
+						dayNumber[i] = String.valueOf(lastDaysOfMonth - (dayOfWeek - (i + 1)));
 					} else {
 						dayNumber[i] = String.valueOf(i - dayOfWeek + 1);
 					}
 				} else {
-					dayNumber[i] = String.valueOf((7 - dayOfWeek + 1 + i) + 7
-							* (week - 2));
+					dayNumber[i] = String.valueOf((7 - dayOfWeek + 1 + i) + 7 * (week - 2));
 				}
 			}
 

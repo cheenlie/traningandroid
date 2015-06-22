@@ -200,6 +200,7 @@ public class MainActivity extends Activity implements OnGestureListener {
 							{
 								dateAdapter.setSeclection(selectPostion); 
 							}
+							Log.i(TAG,"③ onDateSet");
 							flipper1.addView(gridView, 0);
 						}
 					}, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
@@ -207,10 +208,13 @@ public class MainActivity extends Activity implements OnGestureListener {
 			datePickerDialog.setOnShowListener(new OnShowListener() {
 
 				public void onShow(DialogInterface arg0) {
+					Log.i(TAG,"② onShow");
 					InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 					imm.hideSoftInputFromWindow(datePickerDialog.getCurrentFocus().getWindowToken(),InputMethodManager.HIDE_NOT_ALWAYS);
 				}
 			});
+
+			Log.i(TAG,"① show datePickerDialog");
 			datePickerDialog.show();
 		}
 	}
@@ -321,8 +325,7 @@ public class MainActivity extends Activity implements OnGestureListener {
 	 * @param month
 	 */
 	public int getLastDayOfWeek(int year, int month) {
-		return sc.getWeekDayOfLastMonth(year, month,
-				sc.getDaysOfMonth(isLeapyear, month));
+		return sc.getWeekDayOfLastMonth(year, month,sc.getDaysOfMonth(isLeapyear, month));
 	}
 
 	
@@ -337,8 +340,7 @@ public class MainActivity extends Activity implements OnGestureListener {
 	}
 
 	@Override
-	public boolean onFling(MotionEvent arg0, MotionEvent arg1, float arg2,
-			float arg3) {
+	public boolean onFling(MotionEvent arg0, MotionEvent arg1, float arg2,float arg3) {
 		// TODO Auto-generated method stub
 		return false;
 	}
@@ -350,8 +352,7 @@ public class MainActivity extends Activity implements OnGestureListener {
 	}
 
 	@Override
-	public boolean onScroll(MotionEvent arg0, MotionEvent arg1, float arg2,
-			float arg3) {
+	public boolean onScroll(MotionEvent arg0, MotionEvent arg1, float arg2,	float arg3) {
 		// TODO Auto-generated method stub
 		return false;
 	}
