@@ -56,7 +56,7 @@ public class Welcome extends Activity {
 	}
 
 	public void loadMainActivity() {
-		Intent intent = new Intent(Welcome.this, MainActivity.class);
+		Intent intent = new Intent(Welcome.this, MyMainActivity.class);
 		startActivity(intent);
 		finish();
 	}

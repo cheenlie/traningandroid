@@ -25,11 +25,11 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.GestureDetector.OnGestureListener;
+import android.view.View.OnTouchListener;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.DatePicker;
 import android.widget.GridLayout;
 import android.widget.GridView;
@@ -39,9 +39,9 @@ import android.widget.TextView;
 import android.widget.ViewFlipper;
 import android.widget.LinearLayout.LayoutParams;
 
-public class MainActivity extends Activity implements OnGestureListener {
+public class TableMainActivity extends Activity implements OnGestureListener {
 
-	private String TAG = MainActivity.class.getSimpleName();
+	private String TAG = TableMainActivity.class.getSimpleName();
 	private ViewFlipper flipper1 = null;
 	private TextView main_topbar_spinner;
 	private GridView gridView = null;
@@ -94,18 +94,35 @@ public class MainActivity extends Activity implements OnGestureListener {
 		initTopBar();
 	}
 
+	/**
+	 * 绘制一周7天的网格，既星期上面一行表示天的数字
+	 */
 	private void addGridView() {
 		LinearLayout.LayoutParams params=new LinearLayout.LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
 		gridView=new GridView(this);
 		gridView.setNumColumns(7);
 		gridView.setGravity(Gravity.CENTER_VERTICAL);
 		gridView.setSelector(new ColorDrawable(Color.TRANSPARENT));
-		gridView.setVerticalSpacing(1);
-		gridView.setHorizontalSpacing(1);
+		gridView.setVerticalSpacing(1);   //定义两列之间的默认的水平距离
+		gridView.setHorizontalSpacing(1);  //Defines the default vertical spacing between rows. 
+		
+		gridView.setOnTouchListener(new OnTouchListener() {
+			@Override
+			public boolean onTouch(View v, MotionEvent event) {
+				return TableMainActivity.this.gestureDetector.onTouchEvent(event);
+			}
+		});
+		
 		gridView.setLayoutParams(params);
 		
 	}
 
+	@Override
+	public boolean onTouchEvent(MotionEvent event) {
+
+		return this.gestureDetector.onTouchEvent(event);
+	}
+	
 	private void initTopBar() {
 		main_topbar_spinner = (TextView) findViewById(R.id.main_title_spinner);
 
@@ -136,7 +153,7 @@ public class MainActivity extends Activity implements OnGestureListener {
 			}
 
 			calendar.setTime(date);
-			datePickerDialog = new DatePickerDialog(MainActivity.this,	new DatePickerDialog.OnDateSetListener() {
+			datePickerDialog = new DatePickerDialog(TableMainActivity.this,	new DatePickerDialog.OnDateSetListener() {
 
 						@Override
 						public void onDateSet(DatePicker arg0, int year,int month, int dayofMonth) {
@@ -188,7 +205,7 @@ public class MainActivity extends Activity implements OnGestureListener {
 							}
 							currentWeek = week_c;
 							getCurrent();
-							dateAdapter = new DateAdapter(MainActivity.this,getResources(), currentYear, currentMonth,currentWeek, currentNum, selectPostion,currentWeek == 1 ? true : false);
+							dateAdapter = new DateAdapter(TableMainActivity.this,getResources(), currentYear, currentMonth,currentWeek, currentNum, selectPostion,currentWeek == 1 ? true : false);
 							flipper1.removeViewAt(0);
 						    addGridView();
 							dayNumbers = dateAdapter.getDayNumbers();
@@ -209,8 +226,8 @@ public class MainActivity extends Activity implements OnGestureListener {
 
 				public void onShow(DialogInterface arg0) {
 					Log.i(TAG,"② onShow");
-					InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-					imm.hideSoftInputFromWindow(datePickerDialog.getCurrentFocus().getWindowToken(),InputMethodManager.HIDE_NOT_ALWAYS);
+//					InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+//					imm.hideSoftInputFromWindow(datePickerDialog.getCurrentFocus().getWindowToken(),InputMethodManager.HIDE_NOT_ALWAYS);
 				}
 			});
 

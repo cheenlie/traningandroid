@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TabHost xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@android:id/tabhost"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.letv.course.activity.MyMainActivity" >
+    
+     <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical" >
+
+        <FrameLayout
+            android:id="@android:id/tabcontent"
+            android:layout_width="fill_parent"
+            android:layout_height="0.0dip"
+            android:layout_weight="1.0" />
+
+        <LinearLayout
+            android:id="@+id/segmentation_line"
+            android:layout_width="fill_parent"
+            android:layout_height="0.5dp"
+            android:layout_weight="0"
+            android:background="#dcdcdc"
+            android:orientation="horizontal" >
+        </LinearLayout>
+
+        <TabWidget
+            android:id="@android:id/tabs"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.0"
+            android:visibility="gone" />
+
+        <RadioGroup
+            android:id="@+id/main_tab_bottom_radio"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:background="#ffffff"
+            android:gravity="center_vertical"
+            android:orientation="horizontal" >
+
+            <RadioButton
+                android:id="@+id/radio_button_timetable"
+                style="@style/main_tab_bottom"
+                android:layout_marginBottom="3dp"
+                android:layout_marginTop="2dp"
+                android:background="#ffffff"
+                android:checked="true"
+                android:drawableTop="@drawable/timetable_chose"
+                android:text="@string/main_tab_bottom_timetable"
+                android:textColor="#1683c1"
+                android:textSize="12sp" />
+
+
+            <RadioButton
+                android:id="@+id/radio_button_notebook"
+                style="@style/main_tab_bottom"
+                android:layout_marginBottom="3dp"
+                android:layout_marginTop="2dp"
+                android:background="#ffffff"
+                android:drawableTop="@drawable/notebook_unchose"
+                android:text="@string/main_tab_bottom_notebook"
+                android:textColor="#717171"
+                android:textSize="12sp" />
+
+
+            <RadioButton
+                android:id="@+id/radio_button_myinfo"
+                style="@style/main_tab_bottom"
+                android:layout_marginBottom="3dp"
+                android:layout_marginTop="2dp"
+                android:background="#ffffff"
+                android:drawableTop="@drawable/myinfo_unchose"
+                android:text="@string/main_tab_bottom_myinfo"
+                android:textColor="#717171"
+                android:textSize="12sp" />
+        </RadioGroup>
+    </LinearLayout>
+
+</TabHost>
