@@ -2,5 +2,8 @@
 <resources>
 
     <string name="app_name">course</string>
-
+  	<string name="main_tab_bottom_timetable">课表</string>
+    <string name="main_tab_bottom_myinfo">我的</string>
+    <string name="main_tab_bottom_notebook">笔记</string>
+    <string name="action_settings">Settings</string>
 </resources>

@@ -11,7 +11,7 @@
         android:layout_height="match_parent" >
 
         <RelativeLayout
-            android:id="@+id/relativelayout_main_all"
+            android:id="@+id/relativelayout_main_all_contain_flipper_timelist"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@drawable/background_main" >
@@ -87,6 +87,8 @@
                     android:textColor="#2370aa" />
             </LinearLayout>
 
+        
+            
             <ScrollView
                 android:id="@+id/scrollView1"
                 android:layout_width="match_parent"
@@ -98,7 +100,7 @@
                 android:scrollbars="none" >
 
                 <GridLayout
-                    android:id="@+id/gridlayout"
+                    android:id="@+id/timeList_gridlayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:columnCount="8"

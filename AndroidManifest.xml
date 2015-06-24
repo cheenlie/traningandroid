@@ -5,7 +5,7 @@
     android:versionName="1.0" >
 
     <uses-sdk
-        android:minSdkVersion="14"
+        android:minSdkVersion="16"
         android:targetSdkVersion="19" />
 
     <application
@@ -24,11 +24,19 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activity.MainActivity"
-            android:label="拼妈课表" >
+            android:name=".activity.TableMainActivity" >
         </activity>
         <activity
-            android:name=".activity.MyMainActivity">
+            android:name=".activity.MainActivity">
+        </activity>
+        <activity
+            android:name=".activity.NotebookActivity" >
+        </activity>
+        <activity
+            android:name=".activity.MyinfoActivity" >
+        </activity>
+        <activity
+            android:name=".activity.addClassActivity" >
         </activity>
     </application>
 

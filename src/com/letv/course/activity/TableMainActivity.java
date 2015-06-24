@@ -2,12 +2,17 @@ package com.letv.course.activity;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import com.course.timetable.DateAdapter;
 import com.course.timetable.MyTimeUtil;
 import com.course.timetable.SpecialCalendar;
+import com.course.util.Constant;
 import com.letv.course.R;
 
 import android.R.color;
@@ -15,6 +20,7 @@ import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.DialogInterface.OnClickListener;
 import android.content.DialogInterface.OnShowListener;
 import android.gesture.Gesture;
@@ -22,6 +28,7 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.text.TextUtils.TruncateAt;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.GestureDetector.OnGestureListener;
@@ -36,18 +43,19 @@ import android.widget.GridView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ViewFlipper;
 import android.widget.LinearLayout.LayoutParams;
 
 public class TableMainActivity extends Activity implements OnGestureListener {
 
 	private String TAG = TableMainActivity.class.getSimpleName();
-	private ViewFlipper flipper1 = null;
+	private ViewFlipper flipper_day = null;
 	private TextView main_topbar_spinner;
 	private GridView gridView = null;
 	private String currentDate;
-	private int week;
-	private GridLayout grid;
+	private int weeks_nowBetween20140922;
+	private GridLayout timeListGrid;
 	private int year_c = 0;
 	private int month_c = 0;
 	private int day_c = 0;
@@ -69,29 +77,132 @@ public class TableMainActivity extends Activity implements OnGestureListener {
 
 	private SpecialCalendar sc = null;
 	private DateAdapter dateAdapter; 
-	private RelativeLayout relativelayout_main_all;
+	private RelativeLayout relativelayout_main_contain_flipper_timelist;
 	private GestureDetector gestureDetector=null;
+	/*
+	 * updateGridlayout方法专属变量
+	 */
+	View saveView;
+	ArrayList<View> tv_id = new ArrayList<View>();
+	int update_count = 0;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_main);
-		relativelayout_main_all = (RelativeLayout) findViewById(R.id.relativelayout_main_all);
-		
+		relativelayout_main_contain_flipper_timelist = (RelativeLayout) findViewById(R.id.relativelayout_main_all_contain_flipper_timelist);
+		timeListGrid = (GridLayout) findViewById(R.id.timeList_gridlayout);
+		flipper_day=(ViewFlipper) findViewById(R.id.main_flipper_day);
 		
 		gestureDetector=new GestureDetector(this); 
-		flipper1=(ViewFlipper) findViewById(R.id.main_flipper_day);
 		dateAdapter=new DateAdapter(this, getResources(), year_c, month_c, week_c, week_num, selectPostion, currentWeek==1?false:true);
 		addGridView();
 		dayNumbers=dateAdapter.getDayNumbers();
 		gridView.setAdapter(dateAdapter);
-		//
 		gridView.setSelection(selectPostion);
-		flipper1.addView(gridView,0);
+		flipper_day.addView(gridView,0);
 		
+		//获取系统当前时间
+		Date date = new Date();
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy.MM.dd");
+		currentDate = simpleDateFormat.format(date);
+		weeks_nowBetween20140922 = MyTimeUtil.getWeeks(currentDate);
 		
 		initTopBar();
+		
+		new Thread(new Runnable() {
+
+			public void run() {
+				
+				runOnUiThread(new Runnable() {
+					@Override
+					public void run() {
+						try {
+							updateGridlayout(weeks_nowBetween20140922, timeListGrid);
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+					}
+				});
+			}
+		}).start();
+	}
+
+	private void updateGridlayout(int week, GridLayout grid) {
+		try {
+			if (tv_id.size() == 0) {
+			} else {
+				for (int i = 0; i < tv_id.size(); i++) {
+					grid.removeView(tv_id.get(i));
+				}
+				tv_id.clear();
+
+			}
+			if (update_count == 0) {
+				int m=grid.getColumnCount();
+				int n=grid.getRowCount();
+				for (int i = 1; i < grid.getColumnCount(); i++)
+					for (int j = 0; j < grid.getRowCount(); j++) {
+						TextView btn = new TextView(this);
+						btn.setWidth(139);
+						btn.setHeight(100);
+						btn.setText("  ");
+						btn.setGravity(Gravity.CENTER);
+
+						btn.setTextColor(Color.DKGRAY);
+						final int week1 = week;
+						final int day = i - 1;
+						final int starttime = j + 6;
+
+						btn.setOnClickListener(new View.OnClickListener() {
+							
+							@Override
+							public void onClick(View v) {
+								if (saveView != null) {
+									if (saveView == v) {
+										saveView.setBackground(null);
+										saveView = null;
+										Intent intent = new Intent(TableMainActivity.this,addClassActivity.class);
+										intent.putExtra("weekno", week1);
+										intent.putExtra("weekday", day);
+										intent.putExtra("starttime", starttime);
+										Constant.START_ADDCOURSEACTIVITY = Constant.ADD_START;
+										startActivity(intent);
+									} else {
+										saveView.setBackground(null);
+										v.setBackgroundResource(R.drawable.jiahao_1);
+										v.getBackground().setAlpha(70);
+										saveView = v;
+									}
+								} else {
+									saveView = v;
+									saveView.setBackgroundResource(R.drawable.jiahao_1);
+									saveView.getBackground().setAlpha(70);
+								}
+							}
+
+							
+						});
+						GridLayout.Spec rowSpec = GridLayout.spec(j); // 设置它的行和列
+						GridLayout.Spec columnSpec = GridLayout.spec(i);
+						GridLayout.LayoutParams params = new GridLayout.LayoutParams(rowSpec, columnSpec);
+						params.setGravity(Gravity.FILL_VERTICAL);
+						RelativeLayout mylayout = new RelativeLayout(this);
+						RelativeLayout.LayoutParams s = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.MATCH_PARENT);
+						s.addRule(RelativeLayout.CENTER_IN_PARENT, -1);
+						mylayout.setPadding(3, 3, 3, 3);
+						mylayout.addView(btn, s);
+						grid.addView(mylayout, params);
+
+					}
+			} 
+			
+		} catch (Exception e) {
+			
+		}
+
 	}
 
 	/**
@@ -129,9 +240,9 @@ public class TableMainActivity extends Activity implements OnGestureListener {
 		Date date = new Date();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd");
 		String currentDate = sdf.format(date);
-		week = MyTimeUtil.getWeeks(currentDate);
-		System.out.println(week);
-		main_topbar_spinner.setText(MyTimeUtil.getTheWeekStrMonthAndDay(week));
+		weeks_nowBetween20140922 = MyTimeUtil.getWeeks(currentDate);
+		System.out.println(weeks_nowBetween20140922);
+		main_topbar_spinner.setText(MyTimeUtil.getTheWeekStrMonthAndDay(weeks_nowBetween20140922));
 
 		main_topbar_spinner.setOnClickListener(new TextViewClickEvent());
 
@@ -147,7 +258,7 @@ public class TableMainActivity extends Activity implements OnGestureListener {
 			Date date = null;
 
 			try {
-				date = simpleDateFormat.parse(MyTimeUtil.getDateOfWeekAndDay(week, 3));
+				date = simpleDateFormat.parse(MyTimeUtil.getDateOfWeekAndDay(weeks_nowBetween20140922, 3));
 			} catch (ParseException e) {
 				e.printStackTrace();
 			}
@@ -171,9 +282,9 @@ public class TableMainActivity extends Activity implements OnGestureListener {
 							}
 							String dateSelectStr = (year + "." + monthStr + "." + dayofMonthStr);
 							
-							week = MyTimeUtil.getWeeks(dateSelectStr);
-							main_topbar_spinner.setText(MyTimeUtil.getTheWeekStrMonthAndDay(week));
-//							updategvidlayout(week, grid);
+							weeks_nowBetween20140922 = MyTimeUtil.getWeeks(dateSelectStr);
+							main_topbar_spinner.setText(MyTimeUtil.getTheWeekStrMonthAndDay(weeks_nowBetween20140922));
+							updateGridlayout(weeks_nowBetween20140922, timeListGrid);
 							
 							try {
 								date = format.parse(dateSelectStr);
@@ -206,7 +317,7 @@ public class TableMainActivity extends Activity implements OnGestureListener {
 							currentWeek = week_c;
 							getCurrent();
 							dateAdapter = new DateAdapter(TableMainActivity.this,getResources(), currentYear, currentMonth,currentWeek, currentNum, selectPostion,currentWeek == 1 ? true : false);
-							flipper1.removeViewAt(0);
+							flipper_day.removeViewAt(0);
 						    addGridView();
 							dayNumbers = dateAdapter.getDayNumbers();
 							gridView.setAdapter(dateAdapter);
@@ -218,7 +329,7 @@ public class TableMainActivity extends Activity implements OnGestureListener {
 								dateAdapter.setSeclection(selectPostion); 
 							}
 							Log.i(TAG,"③ onDateSet");
-							flipper1.addView(gridView, 0);
+							flipper_day.addView(gridView, 0);
 						}
 					}, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
 

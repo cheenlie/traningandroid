@@ -1,11 +1,10 @@
 package com.letv.course.activity;
-import com.letv.course.R;
 
+import com.letv.course.R;
 import android.os.Bundle;
 import android.app.ActionBar;
 import android.app.TabActivity;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.view.Menu;
 import android.widget.CompoundButton;
@@ -13,18 +12,12 @@ import android.widget.RadioButton;
 import android.widget.TabHost;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 
-public class MyMainActivity extends TabActivity implements	OnCheckedChangeListener {
-	/*
-	 * public final static String OTHER_CHANGE_TO_CACTIVITY =
-	 * "wangyuepeng.changetocactivity"; public final static String
-	 * OTHER_CHANGE_TO_AACTIVITY = "wangyuepeng.changetoaactivity"; public final
-	 * static String OTHER_CHANGE_TO_EACTIVITY =
-	 * "wangyuepeng.changetoeactivity";
-	 */
-	int activitySelected;
+public class MainActivity extends TabActivity implements	OnCheckedChangeListener {
+
+//	int activitySelected;
 	private TabHost mTabHost;
 	private Intent tableMainActIntent;
-	private Intent noteActIntent;
+	private Intent notebookActIntent;
 	private Intent myInfActIntent;
 	RadioButton timetable, notebook, myinfo;
 	Drawable timetable_drawable_on, timetable_drawable_off, notebook_drawable_on, notebook_drawable_off, myinfo_drwable_on, myinfo_drwable_off;
@@ -39,19 +32,22 @@ public class MyMainActivity extends TabActivity implements	OnCheckedChangeListen
 		myActionBar.hide();
 
 		Intent intent = getIntent();
-		this.tableMainActIntent = new Intent(this, TableMainActivity.class);
-//		this.mCIntent = new Intent(this, NoteActivity.class);
-//		this.mEIntent = new Intent(this, MyMessageActivity.class);
+		tableMainActIntent = new Intent(this, TableMainActivity.class);
+		notebookActIntent = new Intent(this, NotebookActivity.class);
+		myInfActIntent = new Intent(this, MyinfoActivity.class);
 		
 //		if (intent.hasExtra("login")) {
 //			String phone_no = intent.getStringExtra("login");
 //			this.mainActIntent.putExtra("login", phone_no);
 //		}
 
-		(timetable = (RadioButton) findViewById(R.id.radio_button_timetable)).setOnCheckedChangeListener(this);
-		(notebook = (RadioButton) findViewById(R.id.radio_button_notebook)).setOnCheckedChangeListener(this);
-		(myinfo = (RadioButton) findViewById(R.id.radio_button_myinfo)).setOnCheckedChangeListener(this);
-
+		timetable = (RadioButton) findViewById(R.id.radio_button_timetable);
+		notebook = (RadioButton) findViewById(R.id.radio_button_notebook);
+		myinfo = (RadioButton) findViewById(R.id.radio_button_myinfo);
+		
+		notebook.setOnCheckedChangeListener(this);
+		timetable.setOnCheckedChangeListener(this);
+		myinfo.setOnCheckedChangeListener(this);
 		setupIntent();
 
 		/*
@@ -88,12 +84,10 @@ public class MyMainActivity extends TabActivity implements	OnCheckedChangeListen
 			switch (buttonView.getId()) {
 			case R.id.radio_button_timetable:
 				this.mTabHost.setCurrentTabByTag("timetable_TAB");
-				activitySelected = 0;
 				setTitle("课表");
-				Resources contral_res = getResources();
-				timetable_drawable_on = contral_res.getDrawable(R.drawable.timetable_chose);
-				notebook_drawable_off = contral_res.getDrawable(R.drawable.notebook_unchose);
-				myinfo_drwable_off = contral_res.getDrawable(R.drawable.myinfo_unchose);
+				timetable_drawable_on = getResources().getDrawable(R.drawable.timetable_chose);
+				notebook_drawable_off = getResources().getDrawable(R.drawable.notebook_unchose);
+				myinfo_drwable_off = getResources().getDrawable(R.drawable.myinfo_unchose);
 				
 				timetable_drawable_on.setBounds(0, 0, timetable_drawable_on.getMinimumWidth(),timetable_drawable_on.getMinimumHeight());
 				timetable_drawable_off.setBounds(0, 0, timetable_drawable_off.getMinimumWidth(),timetable_drawable_off.getMinimumHeight());
@@ -108,21 +102,16 @@ public class MyMainActivity extends TabActivity implements	OnCheckedChangeListen
 				myinfo.setCompoundDrawables(null, myinfo_drwable_off, null, null);
 				myinfo.setTextColor(0xff717171);
 				menuVisible = true;
+				//Activity就会重新调用onCreateOptionMenu()方法重新生成ActionBar
 				invalidateOptionsMenu();
-				/*
-				 * final Intent aintent = new Intent(OTHER_CHANGE_TO_AACTIVITY);
-				 * sendBroadcast(aintent);
-				 */
 				break;
 
 			case R.id.radio_button_notebook:
 				this.mTabHost.setCurrentTabByTag("notebook_TAB");
-				activitySelected = 2;
 				setTitle("笔记");
-				Resources contral_res2 = getResources();
-				timetable_drawable_off = contral_res2.getDrawable(R.drawable.timetable_unchose);
-				notebook_drawable_on = contral_res2.getDrawable(R.drawable.notebook_chose);
-				myinfo_drwable_off = contral_res2.getDrawable(R.drawable.myinfo_unchose);
+				timetable_drawable_off = getResources().getDrawable(R.drawable.timetable_unchose);
+				notebook_drawable_on = getResources().getDrawable(R.drawable.notebook_chose);
+				myinfo_drwable_off = getResources().getDrawable(R.drawable.myinfo_unchose);
 				timetable_drawable_off.setBounds(0, 0, timetable_drawable_off.getMinimumWidth(),timetable_drawable_off.getMinimumHeight());
 				notebook_drawable_on.setBounds(0, 0, notebook_drawable_on.getMinimumWidth(),notebook_drawable_on.getMinimumHeight());
 				myinfo_drwable_off.setBounds(0, 0, myinfo_drwable_off.getMinimumWidth(),myinfo_drwable_off.getMinimumHeight());
@@ -142,12 +131,10 @@ public class MyMainActivity extends TabActivity implements	OnCheckedChangeListen
 
 			case R.id.radio_button_myinfo:
 				this.mTabHost.setCurrentTabByTag("myinfo_TAB");
-				activitySelected = 4;
 				setTitle("我的");
-				Resources contral_res4 = getResources();
-				timetable_drawable_off = contral_res4.getDrawable(R.drawable.timetable_unchose);
-				notebook_drawable_off = contral_res4.getDrawable(R.drawable.notebook_unchose);
-				myinfo_drwable_on = contral_res4.getDrawable(R.drawable.myinfo_chose);
+				timetable_drawable_off = getResources().getDrawable(R.drawable.timetable_unchose);
+				notebook_drawable_off = getResources().getDrawable(R.drawable.notebook_unchose);
+				myinfo_drwable_on = getResources().getDrawable(R.drawable.myinfo_chose);
 				timetable_drawable_off.setBounds(0, 0, timetable_drawable_off.getMinimumWidth(),timetable_drawable_off.getMinimumHeight());
 				notebook_drawable_off.setBounds(0, 0, notebook_drawable_off.getMinimumWidth(),notebook_drawable_off.getMinimumHeight());
 				myinfo_drwable_on.setBounds(0, 0, myinfo_drwable_on.getMinimumWidth(),myinfo_drwable_on.getMinimumHeight());
@@ -171,13 +158,24 @@ public class MyMainActivity extends TabActivity implements	OnCheckedChangeListen
 	private void setupIntent() {
 		this.mTabHost = getTabHost();
 		TabHost localTabHost = this.mTabHost;
-		localTabHost.addTab(buildTabSpec("timetable_TAB", R.string.main_tab_bottom_timetable,R.drawable.timetable_chose, this.tableMainActIntent));
-		localTabHost.addTab(buildTabSpec("notebook_TAB", R.string.main_tab_bottom_notebook,R.drawable.timetable_chose, this.noteActIntent));
-		localTabHost.addTab(buildTabSpec("myinfo_TAB", R.string.main_tab_bottom_myinfo,R.drawable.timetable_chose, this.myInfActIntent));
+		localTabHost.addTab(
+				buildTabSpec("timetable_TAB",
+						R.string.main_tab_bottom_timetable,
+						R.drawable.timetable_chose, 
+						tableMainActIntent)
+				);
+		localTabHost.addTab(buildTabSpec("notebook_TAB", R.string.main_tab_bottom_notebook,R.drawable.timetable_chose, notebookActIntent));
+		localTabHost.addTab(buildTabSpec("myinfo_TAB", R.string.main_tab_bottom_myinfo,R.drawable.timetable_chose, myInfActIntent));
 
 	}
 
 	private TabHost.TabSpec buildTabSpec(String tag, int resLabel, int resIcon,	final Intent content) {
-		return this.mTabHost.newTabSpec(tag).setIndicator(getString(resLabel),getResources().getDrawable(resIcon)).setContent(content);
+		TabHost.TabSpec tabSpec;
+		tabSpec=this.mTabHost.newTabSpec(tag);  //实例化一个分页
+		tabSpec.setIndicator(getString(resLabel), getResources().getDrawable(resIcon)); //设置此分页显示的标题  
+		tabSpec.setContent(content); //设置此分页的资源
+		return tabSpec;
+		
+//		return this.mTabHost.newTabSpec(tag).setIndicator(getString(resLabel),getResources().getDrawable(resIcon)).setContent(content);
 	}
 }
