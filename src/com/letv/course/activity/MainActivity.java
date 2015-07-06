@@ -19,7 +19,8 @@ public class MainActivity extends TabActivity implements	OnCheckedChangeListener
 	private Intent tableMainActIntent;
 	private Intent notebookActIntent;
 	private Intent myInfActIntent;
-	RadioButton timetable, notebook, myinfo;
+	private Intent messageActIntent;
+	RadioButton timetable, notebook, myinfo,mesButton;
 	Drawable timetable_drawable_on, timetable_drawable_off, notebook_drawable_on, notebook_drawable_off, myinfo_drwable_on, myinfo_drwable_off;
 	private boolean menuVisible = true;
 
@@ -35,6 +36,7 @@ public class MainActivity extends TabActivity implements	OnCheckedChangeListener
 		tableMainActIntent = new Intent(this, TableMainActivity.class);
 		notebookActIntent = new Intent(this, NotebookActivity.class);
 		myInfActIntent = new Intent(this, MyinfoActivity.class);
+		messageActIntent=new Intent(this,MessageActivity.class);
 		
 //		if (intent.hasExtra("login")) {
 //			String phone_no = intent.getStringExtra("login");
@@ -44,10 +46,13 @@ public class MainActivity extends TabActivity implements	OnCheckedChangeListener
 		timetable = (RadioButton) findViewById(R.id.radio_button_timetable);
 		notebook = (RadioButton) findViewById(R.id.radio_button_notebook);
 		myinfo = (RadioButton) findViewById(R.id.radio_button_myinfo);
+		mesButton=(RadioButton) findViewById(R.id.radio_button_message);
+		
 		
 		notebook.setOnCheckedChangeListener(this);
 		timetable.setOnCheckedChangeListener(this);
 		myinfo.setOnCheckedChangeListener(this);
+		mesButton.setOnCheckedChangeListener(this);
 		setupIntent();
 
 		/*

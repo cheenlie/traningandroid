@@ -65,7 +65,17 @@
                 android:text="@string/main_tab_bottom_notebook"
                 android:textColor="#717171"
                 android:textSize="12sp" />
-
+            
+             <RadioButton
+                android:id="@+id/radio_button_message"
+                style="@style/main_tab_bottom"
+                android:layout_marginBottom="3dp"
+                android:layout_marginTop="2dp"
+                android:background="#ffffff"
+                android:drawableTop="@drawable/message_unchose"
+                android:text="@string/main_tab_bottom_message"
+                android:textColor="#717171"
+                android:textSize="12sp" />
 
             <RadioButton
                 android:id="@+id/radio_button_myinfo"
@@ -77,6 +87,8 @@
                 android:text="@string/main_tab_bottom_myinfo"
                 android:textColor="#717171"
                 android:textSize="12sp" />
+            
+
         </RadioGroup>
     </LinearLayout>
 

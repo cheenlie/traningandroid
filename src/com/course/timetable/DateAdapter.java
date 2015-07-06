@@ -95,6 +95,28 @@ public class DateAdapter extends BaseAdapter {
 		getWeek(Integer.parseInt(currentYear), Integer.parseInt(currentMonth),Integer.parseInt(currentWeek));
 
 	}
+	
+	public DateAdapter(Context context,  int year_c, int month_c,
+			int week_c, int week_num, int default_postion, boolean isStart) {
+		this();
+		this.context = context;
+		this.default_postion = default_postion;
+		this.week_c = week_c;
+		this.isStart = isStart;
+		sc = new SpecialCalendar();
+
+		lastDayOfWeek = sc.getWeekDayOfLastMonth(year_c, month_c,sc.getDaysOfMonth(sc.isLeapYear(year_c), month_c));
+		Log.i(TAG, "week_c:" + week_c);
+		currentYear = String.valueOf(year_c);
+		; // 得到当前的年份
+		currentMonth = String.valueOf(month_c); // 得到本月
+		// （jumpMonth为滑动的次数，每滑动一次就增加一月或减一月）
+		currentDay = String.valueOf(sys_day); // 得到当前日期是哪天
+		getCalendar(Integer.parseInt(currentYear),Integer.parseInt(currentMonth));
+		currentWeek = String.valueOf(week_c);
+		getWeek(Integer.parseInt(currentYear), Integer.parseInt(currentMonth),Integer.parseInt(currentWeek));
+
+	}
 
 	public int getTodayPosition() {
 		int todayWeek = sc.getWeekDayOfLastMonth(Integer.parseInt(sys_year),

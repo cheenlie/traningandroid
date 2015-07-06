@@ -97,12 +97,16 @@ public class TableMainActivity extends Activity implements OnGestureListener {
 		flipper_day=(ViewFlipper) findViewById(R.id.main_flipper_day);
 		
 		gestureDetector=new GestureDetector(this); 
-		dateAdapter=new DateAdapter(this, getResources(), year_c, month_c, week_c, week_num, selectPostion, currentWeek==1?false:true);
+		dateAdapter=new DateAdapter(this,  year_c, month_c, week_c, week_num, selectPostion, currentWeek==1?false:true);
+//		dateAdapter=new DateAdapter(this, getResources(), year_c, month_c, week_c, week_num, selectPostion, currentWeek==1?false:true);
 		addGridView();
+		//向flipper中添加的数据
 		dayNumbers=dateAdapter.getDayNumbers();
 		gridView.setAdapter(dateAdapter);
 		gridView.setSelection(selectPostion);
-		flipper_day.addView(gridView,0);
+		//更改星期日上方的数据
+//		flipper_day.addView(gridView,0);
+		flipper_day.addView(gridView);
 		
 		//获取系统当前时间
 		Date date = new Date();
@@ -140,26 +144,29 @@ public class TableMainActivity extends Activity implements OnGestureListener {
 				tv_id.clear();
 
 			}
+			
 			if (update_count == 0) {
-				int m=grid.getColumnCount();
-				int n=grid.getRowCount();
+				int m=grid.getColumnCount();  //8
+				int n=grid.getRowCount();     //18
 				for (int i = 1; i < grid.getColumnCount(); i++)
 					for (int j = 0; j < grid.getRowCount(); j++) {
-						TextView btn = new TextView(this);
-						btn.setWidth(139);
-						btn.setHeight(100);
-						btn.setText("  ");
-						btn.setGravity(Gravity.CENTER);
+						TextView btTextView = new TextView(this);
+						btTextView.setWidth(139);
+						btTextView.setHeight(100);
+						btTextView.setText("  ");
+						btTextView.setGravity(Gravity.CENTER);
 
-						btn.setTextColor(Color.DKGRAY);
+						btTextView.setTextColor(Color.DKGRAY);
 						final int week1 = week;
 						final int day = i - 1;
 						final int starttime = j + 6;
 
-						btn.setOnClickListener(new View.OnClickListener() {
+						btTextView.setOnClickListener(new View.OnClickListener() {
 							
 							@Override
 							public void onClick(View v) {
+								
+								//saveView保存某日某时课程的view
 								if (saveView != null) {
 									if (saveView == v) {
 										saveView.setBackground(null);
@@ -185,15 +192,21 @@ public class TableMainActivity extends Activity implements OnGestureListener {
 
 							
 						});
-						GridLayout.Spec rowSpec = GridLayout.spec(j); // 设置它的行和列
+						//确定行号和列号
+						GridLayout.Spec rowSpec = GridLayout.spec(j); 
 						GridLayout.Spec columnSpec = GridLayout.spec(i);
+						//Constructs a new LayoutParams instance for this rowSpec and columnSpec
 						GridLayout.LayoutParams params = new GridLayout.LayoutParams(rowSpec, columnSpec);
 						params.setGravity(Gravity.FILL_VERTICAL);
+						
 						RelativeLayout mylayout = new RelativeLayout(this);
-						RelativeLayout.LayoutParams s = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.MATCH_PARENT);
-						s.addRule(RelativeLayout.CENTER_IN_PARENT, -1);
-						mylayout.setPadding(3, 3, 3, 3);
-						mylayout.addView(btn, s);
+						RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.MATCH_PARENT);
+						layoutParams.addRule(RelativeLayout.CENTER_IN_PARENT, -1);
+						//setPadding(int left, int top, int right, int bottom)
+						mylayout.setPadding(26, 16,26, 16);
+						mylayout.addView(btTextView, layoutParams);
+						
+						//在网格指定列和行号中添加textview控件
 						grid.addView(mylayout, params);
 
 					}
