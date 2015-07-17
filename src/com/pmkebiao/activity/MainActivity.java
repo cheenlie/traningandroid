@@ -1,4 +1,4 @@
-package com.letv.course.activity;
+package com.pmkebiao.activity;
 
 import com.letv.course.R;
 import android.os.Bundle;
@@ -14,7 +14,7 @@ import android.widget.CompoundButton.OnCheckedChangeListener;
 
 public class MainActivity extends TabActivity implements	OnCheckedChangeListener {
 
-//	int activitySelected;
+	public static int childid;   //为赋值
 	private TabHost mTabHost;
 	private Intent tableMainActIntent;
 	private Intent notebookActIntent;

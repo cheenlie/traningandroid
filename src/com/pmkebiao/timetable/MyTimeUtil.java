@@ -1,4 +1,4 @@
-﻿package com.course.timetable;
+﻿package com.pmkebiao.timetable;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;

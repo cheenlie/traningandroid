@@ -1,4 +1,4 @@
-package com.course.util;
+package com.pmkebiao.util;
 
 import android.content.Context;
 
@@ -40,4 +40,9 @@ public class Constant {
 	     * 标记头像是否有修改，1-修改，   0-没修改
 	     */
 	    public static int touxiangChanged=0;
+	    
+	    /**
+	     * 标记笔记是否发生变化 需要重新加载
+	     */
+	    public static boolean noteChanged = false;
 }

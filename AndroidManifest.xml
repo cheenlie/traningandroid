@@ -14,7 +14,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name="com.letv.course.activity.Welcome"
+            android:name="com.pmkebiao.activity.Welcome"
             android:label="@string/app_name"
             android:theme="@style/Theme.AppStartLoadTranslucent" >
             <intent-filter>
@@ -24,22 +24,22 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activity.TableMainActivity" >
+            android:name="com.pmkebiao.activity.TableMainActivity" >
         </activity>
         <activity
-            android:name=".activity.MainActivity">
+            android:name="com.pmkebiao.activity.MainActivity">
         </activity>
         <activity
-            android:name=".activity.NotebookActivity" >
+            android:name="com.pmkebiao.activity.NotebookActivity" >
         </activity>
         <activity
-            android:name=".activity.MyinfoActivity" >
+            android:name="com.pmkebiao.activity.MyinfoActivity" >
         </activity>
         <activity
-            android:name=".activity.addClassActivity" >
+            android:name="com.pmkebiao.activity.addClassActivity" >
         </activity>
                 <activity
-            android:name=".activity.MessageActivity" >
+            android:name="com.pmkebiao.activity.MessageActivity" >
         </activity>
     </application>
 

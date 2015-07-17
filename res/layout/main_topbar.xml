@@ -5,7 +5,7 @@
     android:background="#f2fcff"
     android:gravity="center_vertical" >
 
-    <com.course.util.CircularImage
+    <com.pmkebiao.util.CircularImage
         android:id="@+id/child_head"
          android:layout_width="40dp"
         android:layout_height="40dp"
