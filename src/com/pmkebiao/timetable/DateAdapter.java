@@ -73,31 +73,29 @@ public class DateAdapter extends BaseAdapter {
 		month = Integer.parseInt(sys_month);
 	}
 
-	public DateAdapter(Context context, Resources rs, int year_c, int month_c,
-			int week_c, int week_num, int default_postion, boolean isStart) {
-		this();
-		this.context = context;
-		this.res = rs;
-		this.default_postion = default_postion;
-		this.week_c = week_c;
-		this.isStart = isStart;
-		sc = new SpecialCalendar();
+//	public DateAdapter(Context context, Resources rs, int year_c, int month_c,	int week_c, int week_num, int default_postion, boolean isStart) {
+//		this();
+//		this.context = context;
+////		this.res = rs;
+//		this.default_postion = default_postion;
+//		this.week_c = week_c;
+//		this.isStart = isStart;
+//		sc = new SpecialCalendar();
+//
+//		lastDayOfWeek = sc.getWeekDayOfLastMonth(year_c, month_c,sc.getDaysOfMonth(sc.isLeapYear(year_c), month_c));
+//		Log.i(TAG, "week_c:" + week_c);
+//		currentYear = String.valueOf(year_c);
+//		; // 得到当前的年份
+//		currentMonth = String.valueOf(month_c); // 得到本月
+//		// （jumpMonth为滑动的次数，每滑动一次就增加一月或减一月）
+//		currentDay = String.valueOf(sys_day); // 得到当前日期是哪天
+//		getCalendar(Integer.parseInt(currentYear),Integer.parseInt(currentMonth));
+//		currentWeek = String.valueOf(week_c);
+//		getWeek(Integer.parseInt(currentYear), Integer.parseInt(currentMonth),Integer.parseInt(currentWeek));
+//
+//	}
 
-		lastDayOfWeek = sc.getWeekDayOfLastMonth(year_c, month_c,sc.getDaysOfMonth(sc.isLeapYear(year_c), month_c));
-		Log.i(TAG, "week_c:" + week_c);
-		currentYear = String.valueOf(year_c);
-		; // 得到当前的年份
-		currentMonth = String.valueOf(month_c); // 得到本月
-		// （jumpMonth为滑动的次数，每滑动一次就增加一月或减一月）
-		currentDay = String.valueOf(sys_day); // 得到当前日期是哪天
-		getCalendar(Integer.parseInt(currentYear),Integer.parseInt(currentMonth));
-		currentWeek = String.valueOf(week_c);
-		getWeek(Integer.parseInt(currentYear), Integer.parseInt(currentMonth),Integer.parseInt(currentWeek));
-
-	}
-	
-	public DateAdapter(Context context,  int year_c, int month_c,
-			int week_c, int week_num, int default_postion, boolean isStart) {
+	public DateAdapter(Context context, int year_c, int month_c, int week_c,int week_num, int default_postion, boolean isStart) {
 		this();
 		this.context = context;
 		this.default_postion = default_postion;
@@ -184,12 +182,14 @@ public class DateAdapter extends BaseAdapter {
 			} else {
 				if (week == 1) {
 					if (i < dayOfWeek) {
-						dayNumber[i] = String.valueOf(lastDaysOfMonth - (dayOfWeek - (i + 1)));
+						dayNumber[i] = String.valueOf(lastDaysOfMonth
+								- (dayOfWeek - (i + 1)));
 					} else {
 						dayNumber[i] = String.valueOf(i - dayOfWeek + 1);
 					}
 				} else {
-					dayNumber[i] = String.valueOf((7 - dayOfWeek + 1 + i) + 7 * (week - 2));
+					dayNumber[i] = String.valueOf((7 - dayOfWeek + 1 + i) + 7
+							* (week - 2));
 				}
 			}
 
@@ -242,23 +242,29 @@ public class DateAdapter extends BaseAdapter {
 		return position;
 	}
 
+	/**
+	 * 日历的一行添加内容
+	 */
+
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
+		String[] weekday = new String[] { "\n周日", "\n周一", "\n周二", "\n周三",
+				"\n周四", "\n周五", "\n周六" };
 		if (convertView == null) {
-			convertView = LayoutInflater.from(context).inflate(R.layout.item_calendar, null);
+			convertView = LayoutInflater.from(context).inflate(
+					R.layout.item_calendar, null);
 		}
-		TextView tvCalendar = (TextView) convertView.findViewById(R.id.tv_calendar);
-		tvCalendar.setText(dayNumber[position]);
+		TextView tvCalendar = (TextView) convertView
+				.findViewById(R.id.tv_calendar);
+		tvCalendar.setText(dayNumber[position] + weekday[position]);
 		if (clickTemp == position) {
 			tvCalendar.setSelected(true);
-			// tvCalendar.setBackgroundResource(R.drawable.circle_message);
-			tvCalendar.setBackgroundColor(0x55aaaaaa);
+			tvCalendar.setBackgroundColor(0x66cccccc);
 		} else {
 			tvCalendar.setSelected(false);
 			tvCalendar.setBackgroundColor(Color.TRANSPARENT);
 		}
 		return convertView;
-		
 	}
 
 }
