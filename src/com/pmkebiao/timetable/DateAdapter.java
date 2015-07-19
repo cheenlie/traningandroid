@@ -5,7 +5,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import com.letv.course.R;
+import com.pmkebiao.course.R;
 
 import android.R.integer;
 import android.content.Context;

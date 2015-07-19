@@ -1,6 +1,6 @@
 package com.pmkebiao.activity;
 
-import com.letv.course.R;
+import com.pmkebiao.course.R;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;

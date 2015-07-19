@@ -9,7 +9,7 @@ import java.util.Date;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import com.letv.course.R;
+import com.pmkebiao.course.R;
 import com.pmkebiao.dao.SingleClass;
 import com.pmkebiao.db.*;
 import com.pmkebiao.timetable.DateAdapter;
@@ -18,18 +18,17 @@ import com.pmkebiao.timetable.SpecialCalendar;
 import com.pmkebiao.util.Constant;
 
 import android.R.color;
+import android.R.drawable;
+import android.R.layout;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.DialogInterface.OnClickListener;
 import android.content.DialogInterface.OnShowListener;
-import android.gesture.Gesture;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.TextUtils.TruncateAt;
@@ -42,6 +41,7 @@ import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.DatePicker;
 import android.widget.GridLayout;
 import android.widget.GridView;
@@ -49,7 +49,6 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.widget.ViewFlipper;
 import android.widget.LinearLayout.LayoutParams;
 
@@ -91,7 +90,18 @@ public class TableMainActivity extends Activity implements OnGestureListener {
 	View saveView;
 	ArrayList<View> viewArrayList = new ArrayList<View>();
 	int updateGridViewCount = 0;   //更新网格的次数统计
+	LinearLayout linearlayout;
 	
+	private boolean setbackground = true;
+	public static int childid;   //
+	public static int weekAdd;
+	View vSave;    //
+	int height = 0;
+	int heightTotal = 0;
+	int scrollHeightDistanceBy8Hour;
+	int scrollHeightOnePX;
+	int widPx;  //
+	ScrollView tableScrollView;  //
 	
 	public TableMainActivity() {
 		Date date = new Date();
@@ -121,7 +131,7 @@ public class TableMainActivity extends Activity implements OnGestureListener {
 			}
 		}
 		currentWeek = week_c;
-		Log.e(TAG + "currentWeek", String.valueOf(currentWeek));
+		Log.e(TAG + "currentWeek----1", String.valueOf(currentWeek));
 		getCurrent();
 
 	}
@@ -130,10 +140,25 @@ public class TableMainActivity extends Activity implements OnGestureListener {
 		super.onCreate(savedInstanceState);
 		
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
-		setContentView(R.layout.activity_main);
+		setContentView(R.layout.activity_main);  //显示整个table的activity
 		relativelayout_main_contain_flipper_timelist = (RelativeLayout) findViewById(R.id.relativelayout_main_all_contain_flipper_timelist);
-		timeListGrid = (GridLayout) findViewById(R.id.timeList_gridlayout);
-		flipper_day=(ViewFlipper) findViewById(R.id.main_flipper_day);
+		
+		linearlayout = (LinearLayout) findViewById(R.id.linearLayout);  //给gridview层加上触摸监听器
+		linearlayout.setOnTouchListener(new OnTouchListener() {
+			@Override
+			public boolean onTouch(View v, MotionEvent event) {
+				return TableMainActivity.this.gestureDetector.onTouchEvent(event);
+			}
+		});
+		
+		tableScrollView=(ScrollView) findViewById(R.id.table_scrollView); //线性布局中加一个scrollview
+		
+		WindowManager wm = this.getWindowManager();
+		int width = wm.getDefaultDisplay().getWidth();
+		widPx = (width - dipTopx(TableMainActivity.this, 25)) / 7;
+		
+		timeListGrid = (GridLayout) findViewById(R.id.timeList_gridlayout);//scroll_view中加一个gridlayout，显示时间列表
+		flipper_day=(ViewFlipper) findViewById(R.id.main_flipper_day);  //显示周一到周日
 		
 		gestureDetector=new GestureDetector(this); 
 		dateAdapter=new DateAdapter(this,  year_c, month_c, week_c, week_num, selectPostion, currentWeek==1?false:true);
@@ -174,32 +199,6 @@ public class TableMainActivity extends Activity implements OnGestureListener {
 			}
 		}).start();
 	}
-	
-	private boolean setbackground = true;
-	public static int childid;   //
-	public static int weekAdd;
-	View vSave;    //
-	int height = 0;
-	int heightTotal = 0;
-	int scrollHeightDistanceBy8Hour;
-	int scrollHeightOnePX;
-	int widPx;  //
-	
-	ScrollView tableScrollView;  //
-	
-	 /**
-     * 根据手机的分辨率从 dp 的单位 转成为 px(像素)
-     * 
-     * dp=dip,不同手机显示效果不同，不依赖像素，
-     * px不同设备显示效果一样
-     * sp: scaled pixels(放大像素). 主要用于字体显示best for textsize
-     */
-	public int dipTopx(Context context, float pxValue) {
-
-		final float scale = context.getResources().getDisplayMetrics().density;
-		return (int) (pxValue * scale + 0.5f);
-	}
-	
 	
 	private void updateGridlayout(int weekOfClassBegin, GridLayout tableGridLayout) {
 		
@@ -275,49 +274,30 @@ public class TableMainActivity extends Activity implements OnGestureListener {
 										vSave.setBackground(null);
 										vSave = null;
 										AlertDialog.Builder builder = new AlertDialog.Builder(TableMainActivity.this);
-										builder.setMessage("添加课程")
-												.setCancelable(true)
-												.setPositiveButton(
+										builder.setMessage("添加课程").setCancelable(true).
+														setPositiveButton(
 														"课外班",
 														new DialogInterface.OnClickListener() {
-															public void onClick(
-																	DialogInterface dialog,
-																	int id) {
+															public void onClick(DialogInterface dialog,	int id) {
 																setbackground = false;
-																Intent intent = new Intent(TableMainActivity.this,
-																		AddCourseActivity.class);
-																intent.putExtra(
-																		"weekno",
-																		weekAdd);
-																intent.putExtra(
-																		"classDayOfWeek",
-																		day);
-																intent.putExtra(
-																		"startTimeDistanceBy8Hour",
-																		startTimeDistanceBy8Hour);
+																Intent intent = new Intent(TableMainActivity.this,AddCourseActivity.class);
+																intent.putExtra("weekno",weekAdd);
+																intent.putExtra("classDayOfWeek",day);
+																intent.putExtra("startTimeDistanceBy8Hour",startTimeDistanceBy8Hour);
 																Constant.START_ADDCOURSEACTIVITY = Constant.ADD_START;
 																startActivity(intent);
 															}
-														})
-												.setNegativeButton(
+														}).setNegativeButton(
 														"校内课",
 														new DialogInterface.OnClickListener() {
-															public void onClick(
-																	DialogInterface dialog,
-																	int id) {
+															public void onClick(DialogInterface dialog,int id) {
 																setbackground = false;
-//																Intent intent = new Intent(TableMainActivity.this,	AddClassXiaoneiActivity.class);
-//																intent.putExtra(
-//																		"weekno",
-//																		weekAdd);
-//																intent.putExtra(
-//																		"classDayOfWeek",
-//																		day);
-//																intent.putExtra(
-//																		"startTimeDistanceBy8Hour",
-//																		startTimeDistanceBy8Hour);
-//																Constant.START_ADDCOURSEACTIVITY = Constant.ADD_START;
-//																startActivity(intent);
+																Intent intent = new Intent(TableMainActivity.this,	AddClassXiaoneiActivity.class);
+																intent.putExtra("weekno",weekAdd);
+																intent.putExtra("classDayOfWeek",day);
+																intent.putExtra("startTimeDistanceBy8Hour",startTimeDistanceBy8Hour);
+																Constant.START_ADDCOURSEACTIVITY = Constant.ADD_START;
+																startActivity(intent);
 															}
 														});
 										// 用对话框构造器创建对话框
@@ -486,8 +466,6 @@ public class TableMainActivity extends Activity implements OnGestureListener {
 		}
 
 	}
-	
-	
 
 	/**
 	 * 绘制一周7天的网格，既星期上面一行表示天的数字
@@ -516,7 +494,6 @@ public class TableMainActivity extends Activity implements OnGestureListener {
 	 * 判断手势的函数
 	 * 鼠标手势相当于一个向量（当然有可能手势是曲线），e1为向量的起点，e2为向量的终点，velocityX为向量水平方向的速度，velocityY为向量垂直方向的速度
 	 */
-	
 	@Override
 	public boolean onFling(MotionEvent beginePoint, MotionEvent endPoint, float velocityX,	float velocityY) {
 		int gvFlag = 0;
@@ -529,7 +506,6 @@ public class TableMainActivity extends Activity implements OnGestureListener {
 			dateAdapter = new DateAdapter(this,  currentYear,currentMonth, currentWeek, currentNum, selectPostion,currentWeek == 1 ? true : false);
 			dayNumbers = dateAdapter.getDayNumbers();
 			gridView.setAdapter(dateAdapter);
-			// tvDate.setText(dateAdapter.getCurrentMonth(selectPostion) + "月");
 			gvFlag++;
 			flipper_day.addView(gridView, gvFlag);
 
@@ -560,13 +536,12 @@ public class TableMainActivity extends Activity implements OnGestureListener {
 		} else if (beginePoint.getX() - endPoint.getX() < -240) {
 			addGridView();
 			currentWeek--;
-			Log.e(TAG + "currentWeek", String.valueOf(currentWeek));
 			getCurrent();
 //			dateAdapter = new DateAdapter(this, getResources(), currentYear,currentMonth, currentWeek, currentNum, selectPostion,currentWeek == 1 ? true : false);
 			dateAdapter = new DateAdapter(this, currentYear,currentMonth, currentWeek, currentNum, selectPostion,currentWeek == 1 ? true : false);
 			dayNumbers = dateAdapter.getDayNumbers();
 			gridView.setAdapter(dateAdapter);
-			// tvDate.setText(dateAdapter.getCurrentMonth(selectPostion) + "月");
+			//tvDate.setText(dateAdapter.getCurrentMonth(selectPostion) + "月");
 			gvFlag++;
 			flipper_day.addView(gridView, gvFlag);
 
@@ -574,12 +549,9 @@ public class TableMainActivity extends Activity implements OnGestureListener {
 			 * 汪修改 只把当前日期标记
 			 */
 			Calendar c111 = Calendar.getInstance();
-			if (c111.get(Calendar.YEAR) == dateAdapter
-					.getCurrentYear(selectPostion)
-					&& (c111.get(Calendar.MONTH) + 1) == dateAdapter
-							.getCurrentMonth(selectPostion)
-					&& c111.get(Calendar.DAY_OF_MONTH) == Integer
-							.parseInt(dayNumbers[selectPostion])) {
+			if (c111.get(Calendar.YEAR) == dateAdapter.getCurrentYear(selectPostion)
+					&& (c111.get(Calendar.MONTH) + 1) == dateAdapter.getCurrentMonth(selectPostion)
+					&& c111.get(Calendar.DAY_OF_MONTH) == Integer.parseInt(dayNumbers[selectPostion])) {
 				dateAdapter.setSeclection(selectPostion);
 			}
 			this.flipper_day.setInAnimation(AnimationUtils.loadAnimation(this,R.anim.push_right_in));
@@ -599,9 +571,6 @@ public class TableMainActivity extends Activity implements OnGestureListener {
 		}
 		return false;
 	}
-
-	
-
 	
 	private void initTopBar() {
 		main_topbar_spinner = (TextView) findViewById(R.id.main_title_spinner);
@@ -716,6 +685,19 @@ public class TableMainActivity extends Activity implements OnGestureListener {
 			datePickerDialog.show();
 		}
 	}
+
+	 /**
+     * 根据手机的分辨率从 dp 的单位 转成为 px(像素)
+     * 
+     * dp=dip,不同手机显示效果不同，不依赖像素，
+     * px不同设备显示效果一样
+     * sp: scaled pixels(放大像素). 主要用于字体显示best for textsize
+     */
+	public int dipTopx(Context context, float pxValue) {
+
+		final float scale = context.getResources().getDisplayMetrics().density;
+		return (int) (pxValue * scale + 0.5f);
+	}
 	
 	public void getCalendar(int year, int month) {
 		isLeapyear = specialCalendar.isLeapYear(year); // 是否为闰年
@@ -758,6 +740,20 @@ public class TableMainActivity extends Activity implements OnGestureListener {
 		}
 		return weeksOfMonth;
 
+	}
+	
+	/**
+	 * 
+	 * @param year
+	 * @param month
+	 */
+	public int getLastDayOfWeek(int year, int month) {
+		return specialCalendar.getWeekDayOfLastMonth(year, month,specialCalendar.getDaysOfMonth(isLeapyear, month));
+	}
+
+	@Override
+	public boolean onTouchEvent(MotionEvent event) {
+		return this.gestureDetector.onTouchEvent(event);
 	}
 	
 	/**
@@ -817,27 +813,12 @@ public class TableMainActivity extends Activity implements OnGestureListener {
 
 	}
 	
-	/**
-	 * 
-	 * @param year
-	 * @param month
-	 */
-	public int getLastDayOfWeek(int year, int month) {
-		return specialCalendar.getWeekDayOfLastMonth(year, month,specialCalendar.getDaysOfMonth(isLeapyear, month));
-	}
-
-	@Override
-	public boolean onTouchEvent(MotionEvent event) {
-		return this.gestureDetector.onTouchEvent(event);
-	}
-	
 	
 	@Override
 	public boolean dispatchTouchEvent(MotionEvent ev) {
 		TableMainActivity.this.gestureDetector.onTouchEvent(ev);
 		return super.dispatchTouchEvent(ev);
 	}
-
 
 	/**
 	 * onDown -> onSingleTapUp 方法都是继承自OnGestureListener 
@@ -848,7 +829,6 @@ public class TableMainActivity extends Activity implements OnGestureListener {
 		// TODO Auto-generated method stub
 		return false;
 	}
-
 
 	@Override
 	public void onLongPress(MotionEvent arg0) {
@@ -873,6 +853,4 @@ public class TableMainActivity extends Activity implements OnGestureListener {
 		// TODO Auto-generated method stub
 		return false;
 	}
-
-	
 }
