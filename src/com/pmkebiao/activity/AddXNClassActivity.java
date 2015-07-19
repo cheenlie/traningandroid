@@ -53,7 +53,7 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 import android.widget.AdapterView.OnItemSelectedListener;
 
-public class AddClassXiaoneiActivity extends Activity implements OnTouchListener {
+public class AddXNClassActivity extends Activity implements OnTouchListener {
 	private String location_tem;
 	private int isFirst = 0;
 	private boolean isFirstSet = true;
@@ -168,7 +168,7 @@ public class AddClassXiaoneiActivity extends Activity implements OnTouchListener
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
-//		setContentView(R.layout.add_class_xiaonei_layout);
+		setContentView(R.layout.add_xn_class_layout);
 		manager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 
 		/*
@@ -206,18 +206,18 @@ public class AddClassXiaoneiActivity extends Activity implements OnTouchListener
 				int what = msg.what;
 				if (what == Constant.ADD_START) {
 					if (http_code.equals("0")) {
-						Toast.makeText(AddClassXiaoneiActivity.this, "插入", 800);
+						Toast.makeText(AddXNClassActivity.this, "插入", 800);
 					} else {
 						Constant.noteChanged = true;
-						AddClassXiaoneiActivity.this.finish();
+						AddXNClassActivity.this.finish();
 					}
 				}
 				if (what == Constant.EDIT_START) {
 					if (http_code.equals("0")) {
-						Toast.makeText(AddClassXiaoneiActivity.this, "编辑失败",800);
+						Toast.makeText(AddXNClassActivity.this, "编辑失败",800);
 					} else {
 						Constant.noteChanged = true;
-						AddClassXiaoneiActivity.this.finish();
+						AddXNClassActivity.this.finish();
 					}
 				}
 			}
@@ -421,7 +421,7 @@ public class AddClassXiaoneiActivity extends Activity implements OnTouchListener
 	private void getIntentData() {
 		Intent intent = this.getIntent();
 		scShow = (SingleClass) intent.getSerializableExtra("scc");
-		cf = scShow.getclassinfo(AddClassXiaoneiActivity.this,
+		cf = scShow.getclassinfo(AddXNClassActivity.this,
 				scShow.getClass_id());
 		others = scShow.getOthers();
 	}
@@ -1137,41 +1137,41 @@ public class AddClassXiaoneiActivity extends Activity implements OnTouchListener
 					 * 添加课程
 					 */
 					if (class_name_edit.getText().toString().isEmpty()) {
-						Toast.makeText(AddClassXiaoneiActivity.this,
+						Toast.makeText(AddXNClassActivity.this,
 								"请正确填写课程名", 1000).show();
 					} else if (timers_total_edit.getText().toString().isEmpty()) {
-						Toast.makeText(AddClassXiaoneiActivity.this,
+						Toast.makeText(AddXNClassActivity.this,
 								"请正确填写课程总次数", 1000).show();
 					} else if (Integer.parseInt(timers_oneweek_spinner
 							.getSelectedItem().toString()) > Integer
 							.parseInt(timers_total_edit.getText().toString())) {
-						Toast.makeText(AddClassXiaoneiActivity.this,
+						Toast.makeText(AddXNClassActivity.this,
 								"上课总次数不能小于每周上课次数，请修改！", 1500).show();
-					} else if (NetworkState.isCon(AddClassXiaoneiActivity.this) == false) {
-						Toast.makeText(AddClassXiaoneiActivity.this, "请检查网络！",
+					} else if (NetworkState.isCon(AddXNClassActivity.this) == false) {
+						Toast.makeText(AddXNClassActivity.this, "请检查网络！",
 								1500).show();
 					} else if (Integer.parseInt(timers_total_edit.getText()
 							.toString()) > 366
 							|| Integer.parseInt(timers_total_edit.getText()
 									.toString()) < 1) {
-						Toast.makeText(AddClassXiaoneiActivity.this,
+						Toast.makeText(AddXNClassActivity.this,
 								"上课总次数应在1-366之间，请修改！", 1500).show();
 					} else {
 						timeLess6 = false;
 						aaaaa = getDataAdd();
 //						CheckClassTimeUtil check = new CheckClassTimeUtil(Class_each_week, Class_starttime,Class_finnishtime);
 						if (timeLess6) {
-							Toast.makeText(AddClassXiaoneiActivity.this,
+							Toast.makeText(AddXNClassActivity.this,
 									"为保证孩子休息，请不要让上课时间早于8点！", 1500).show();
 //						} else if (check.checkConflict()) {
 							/**
 							 * 时间冲突
 							 */
-							Toast.makeText(AddClassXiaoneiActivity.this,
+							Toast.makeText(AddXNClassActivity.this,
 									"您选择的时间有冲突,请检查", 1500).show();
 						} else {
 							ProgressDialog pp = new ProgressDialog(
-									AddClassXiaoneiActivity.this);
+									AddXNClassActivity.this);
 							pp.setMessage("操作中，请稍候……");
 							pp.show();
 							right_textview.setClickable(false);
@@ -1186,11 +1186,11 @@ public class AddClassXiaoneiActivity extends Activity implements OnTouchListener
 										int a = aaaaa.getChild_id();
 										ChildInfo ci = dbo
 												.getsingle_child_info(
-														AddClassXiaoneiActivity.this,
+														AddXNClassActivity.this,
 														aaaaa.getChild_id());
 										String user_number = dbo
 												.get_user_info_1(
-														AddClassXiaoneiActivity.this,
+														AddXNClassActivity.this,
 														ci.getParent_id())
 												.getPhone_no();
 										String cid = ci.getCid();
@@ -1225,7 +1225,7 @@ public class AddClassXiaoneiActivity extends Activity implements OnTouchListener
 					}
 
 				} else if (arg0 == left_imageview) {
-					AddClassXiaoneiActivity.this.finish();
+					AddXNClassActivity.this.finish();
 				}
 			} else if (Constant.START_ADDCOURSEACTIVITY == Constant.EDIT_START) {
 				if (arg0 == right_textview) {
@@ -1237,24 +1237,24 @@ public class AddClassXiaoneiActivity extends Activity implements OnTouchListener
 					DBOperation dbo = new DBOperation();
 
 					if (class_name_edit.getText().toString().isEmpty()) {
-						Toast.makeText(AddClassXiaoneiActivity.this,
+						Toast.makeText(AddXNClassActivity.this,
 								"请正确填写课程名", 1000).show();
 					} else if (timers_total_edit.getText().toString().isEmpty()) {
-						Toast.makeText(AddClassXiaoneiActivity.this,
+						Toast.makeText(AddXNClassActivity.this,
 								"请正确填写课程总次数", 1000).show();
 					} else if (Integer.parseInt(timers_oneweek_spinner
 							.getSelectedItem().toString()) > Integer
 							.parseInt(timers_total_edit.getText().toString())) {
-						Toast.makeText(AddClassXiaoneiActivity.this,
+						Toast.makeText(AddXNClassActivity.this,
 								"上课总次数不能小于每周上课次数，请修改！", 1500).show();
-					} else if (NetworkState.isCon(AddClassXiaoneiActivity.this) == false) {
-						Toast.makeText(AddClassXiaoneiActivity.this, "请检查网络！",
+					} else if (NetworkState.isCon(AddXNClassActivity.this) == false) {
+						Toast.makeText(AddXNClassActivity.this, "请检查网络！",
 								1500).show();
 					} else if (Integer.parseInt(timers_total_edit.getText()
 							.toString()) > 366
 							|| Integer.parseInt(timers_total_edit.getText()
 									.toString()) < 1) {
-						Toast.makeText(AddClassXiaoneiActivity.this,
+						Toast.makeText(AddXNClassActivity.this,
 								"上课总次数应在1-366之间，请修改！", 1500).show();
 					} else {
 
@@ -1263,18 +1263,18 @@ public class AddClassXiaoneiActivity extends Activity implements OnTouchListener
 //						CheckClassTimeUtil check = new CheckClassTimeUtil(Class_each_week, Class_starttime,
 //								Class_finnishtime);
 						if (timeLess6) {
-							Toast.makeText(AddClassXiaoneiActivity.this,
+							Toast.makeText(AddXNClassActivity.this,
 									"为保证孩子休息，请不要让上课时间早于8点！", 1500).show();
 //						} else if (check.checkConflict()) {
 							/**
 							 * 时间冲突
 							 */
-							Toast.makeText(AddClassXiaoneiActivity.this,
+							Toast.makeText(AddXNClassActivity.this,
 									"您选择的时间有冲突,请检查", 1500).show();
 						}
 
 						AlertDialog.Builder builder = new AlertDialog.Builder(
-								AddClassXiaoneiActivity.this);
+								AddXNClassActivity.this);
 						builder.setMessage("如果本课程有笔记记录，编辑课程会丢失笔记！是否继续？")
 								.setCancelable(true)
 								.setPositiveButton("继续",
@@ -1286,7 +1286,7 @@ public class AddClassXiaoneiActivity extends Activity implements OnTouchListener
 													int arg1) {
 
 												ProgressDialog pp = new ProgressDialog(
-														AddClassXiaoneiActivity.this);
+														AddXNClassActivity.this);
 												pp.setMessage("操作中，请稍候……");
 												pp.show();
 												right_textview
@@ -1300,10 +1300,10 @@ public class AddClassXiaoneiActivity extends Activity implements OnTouchListener
 														try {
 															aaaaa = getDataAdd();
 															int a = aaaaa.getChild_id();
-															ChildInfo ci = dbo.getsingle_child_info(AddClassXiaoneiActivity.this,
+															ChildInfo ci = dbo.getsingle_child_info(AddXNClassActivity.this,
 																			aaaaa.getChild_id());
 
-															String user_number = dbo.get_user_info_1(AddClassXiaoneiActivity.this,
+															String user_number = dbo.get_user_info_1(AddXNClassActivity.this,
 																			ci.getParent_id())
 																	.getPhone_no();
 															String cid = ci.getCid();
@@ -1349,7 +1349,7 @@ public class AddClassXiaoneiActivity extends Activity implements OnTouchListener
 					}
 					aaaaa = null;
 				} else if (arg0 == left_imageview) {
-					AddClassXiaoneiActivity.this.finish();
+					AddXNClassActivity.this.finish();
 				}
 
 			}
@@ -1529,7 +1529,7 @@ public class AddClassXiaoneiActivity extends Activity implements OnTouchListener
 				public void onClick(View view) {
 
 					TimePickerDialog startTimePickerDialog = new TimePickerDialog(
-							AddClassXiaoneiActivity.this,
+							AddXNClassActivity.this,
 							new TimePickerDialog.OnTimeSetListener() {
 
 								@Override
@@ -1590,7 +1590,7 @@ public class AddClassXiaoneiActivity extends Activity implements OnTouchListener
 				@Override
 				public void onClick(View view) {
 
-					new TimePickerDialog(AddClassXiaoneiActivity.this,
+					new TimePickerDialog(AddXNClassActivity.this,
 							new TimePickerDialog.OnTimeSetListener() {
 
 								@Override

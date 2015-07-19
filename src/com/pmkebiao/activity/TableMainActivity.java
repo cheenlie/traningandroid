@@ -292,7 +292,7 @@ public class TableMainActivity extends Activity implements OnGestureListener {
 														new DialogInterface.OnClickListener() {
 															public void onClick(DialogInterface dialog,int id) {
 																setbackground = false;
-																Intent intent = new Intent(TableMainActivity.this,	AddClassXiaoneiActivity.class);
+																Intent intent = new Intent(TableMainActivity.this,	AddXNClassActivity.class);
 																intent.putExtra("weekno",weekAdd);
 																intent.putExtra("classDayOfWeek",day);
 																intent.putExtra("startTimeDistanceBy8Hour",startTimeDistanceBy8Hour);
