@@ -60,6 +60,7 @@ public class TableMainActivity extends Activity implements OnGestureListener {
 	private ViewFlipper flipper_day = null;
 	private TextView main_topbar_spinner;
 	private GridView gridView = null;
+//	private String currentDate;
 	private int weeks_nowBetween20140922;
 	private GridLayout timeListGrid;
 	private int year_c = 0;
@@ -68,6 +69,7 @@ public class TableMainActivity extends Activity implements OnGestureListener {
 	private int week_c = 0;
 	private int week_num = 0;
 
+	// private TextView tvDate;
 	private int currentYear;
 	private int currentMonth;
 	private int currentWeek;
@@ -75,16 +77,19 @@ public class TableMainActivity extends Activity implements OnGestureListener {
 
 	private int daysOfMonth = 0; 
 	private int dayOfWeek = 0; 
+//	private int weeksOfMonth = 0;
 	private boolean isLeapyear = false; 
 	private int selectPostion = 0;
 	private String dayNumbers[] = new String[7];
 
 	private SpecialCalendar specialCalendar = null;
 	private DateAdapter dateAdapter; 
+//	private RelativeLayout relativelayout_main_contain_flipper_timelist;
 	private GestureDetector gestureDetector=null;
 	/*
 	 * updateGridlayout方法专属变量
 	 */
+//	View saveView;
 	ArrayList<View> viewArrayList = new ArrayList<View>();
 	int updateGridViewCount = 0;   //更新网格的次数统计
 	LinearLayout linearlayout;
@@ -100,6 +105,7 @@ public class TableMainActivity extends Activity implements OnGestureListener {
 	int scrollHeightDistanceBy8Hour;
 	int scrollHeightOnePX;
 	int widPx;  //
+	
 	
 	public TableMainActivity() {
 		String currentTimeString=ToolsUtil.getCurrentTimeStringHX();
@@ -127,6 +133,7 @@ public class TableMainActivity extends Activity implements OnGestureListener {
 			}
 		}
 		currentWeek = week_c;
+		Log.e(TAG + "currentWeek----1", String.valueOf(currentWeek));
 		getCurrent();
 
 	}
@@ -136,6 +143,7 @@ public class TableMainActivity extends Activity implements OnGestureListener {
 		
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_main);  //显示整个table的activity
+//		relativelayout_main_contain_flipper_timelist = (RelativeLayout) findViewById(R.id.relativelayout_main_all_contain_flipper_timelist);
 		
 		linearlayout = (LinearLayout) findViewById(R.id.linearLayout);  //给gridview层加上触摸监听器
 		linearlayout.setOnTouchListener(new OnTouchListener() {
@@ -156,6 +164,7 @@ public class TableMainActivity extends Activity implements OnGestureListener {
 		
 		gestureDetector=new GestureDetector(this); 
 		dateAdapter=new DateAdapter(this,  year_c, month_c, week_c, week_num, selectPostion, currentWeek==1?false:true);
+//		dateAdapter=new DateAdapter(this, getResources(), year_c, month_c, week_c, week_num, selectPostion, currentWeek==1?false:true);
 		addGridView();
 		
 		//向flipper中添加的数据
@@ -165,6 +174,14 @@ public class TableMainActivity extends Activity implements OnGestureListener {
 		gridView.setSelection(selectPostion);
 		//更改星期日上方的数据
 		flipper_day.addView(gridView,0);
+//		flipper_day.addView(gridView);
+		
+		//获取系统当前时间
+//		Date date = new Date();
+//		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy.MM.dd");
+//		currentDate = simpleDateFormat.format(date);
+//		weeks_nowBetween20140922 = MyTimeUtil.getWeeks(currentDate);
+		
 		weeks_nowBetween20140922 = MyTimeUtil.getWeeks(ToolsUtil.getCurrentTimeStringD());
 		
 		initTopBar();
@@ -561,6 +578,12 @@ public class TableMainActivity extends Activity implements OnGestureListener {
 	/** 初始化日历条 **/
 	private void initTopBar() {
 		main_topbar_spinner = (TextView) findViewById(R.id.main_title_spinner);
+
+//		Date date = new Date();
+//		SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd");
+//		currentDate = sdf.format(date);
+//		weeks_nowBetween20140922 = MyTimeUtil.getWeeks(currentDate);
+		
 		weeks_nowBetween20140922 = MyTimeUtil.getWeeks(ToolsUtil.getCurrentTimeStringD());
 		
 		System.out.println(weeks_nowBetween20140922);
@@ -614,6 +637,12 @@ public class TableMainActivity extends Activity implements OnGestureListener {
 								e.printStackTrace();
 							}
 							
+//							SimpleDateFormat sdf = new SimpleDateFormat("yyyy-M-d");
+//							currentDate = sdf.format(date);
+//							year_c = Integer.parseInt(currentDate.split("-")[0]);
+//							month_c = Integer.parseInt(currentDate.split("-")[1]);
+//							day_c = Integer.parseInt(currentDate.split("-")[2]);
+							
 							String currentDateString=ToolsUtil.getCurrentTimeStringHX();
 							year_c = Integer.parseInt(currentDateString.split("-")[0]);
 							month_c = Integer.parseInt(currentDateString.split("-")[1]);
@@ -639,6 +668,7 @@ public class TableMainActivity extends Activity implements OnGestureListener {
 							}
 							currentWeek = week_c;
 							getCurrent();
+//							dateAdapter = new DateAdapter(TableMainActivity.this,getResources(), currentYear, currentMonth,currentWeek, currentNum, selectPostion,currentWeek == 1 ? true : false);
 							dateAdapter = new DateAdapter(TableMainActivity.this, currentYear, currentMonth,currentWeek, currentNum, selectPostion,currentWeek == 1 ? true : false);
 							flipper_day.removeViewAt(0);
 						    addGridView();
@@ -669,12 +699,63 @@ public class TableMainActivity extends Activity implements OnGestureListener {
 			datePickerDialog.show();
 		}
 	}
+
+//	 /**
+//     * 根据手机的分辨率从 dp 的单位 转成为 px(像素)
+//     * 
+//     * dp=dip,不同手机显示效果不同，不依赖像素，
+//     * px不同设备显示效果一样
+//     * sp: scaled pixels(放大像素). 主要用于字体显示best for textsize
+//     */
+//	public int dipTopx(Context context, float pxValue) {
+//
+//		final float scale = context.getResources().getDisplayMetrics().density;
+//		return (int) (pxValue * scale + 0.5f);
+//	}
 	
 	public void getCalendar(int year, int month) {
 		isLeapyear = specialCalendar.isLeapYear(year); // 是否为闰年
 		daysOfMonth = specialCalendar.getDaysOfMonth(isLeapyear, month); // 某月的总天数
 		dayOfWeek = specialCalendar.getWeekdayOfMonth(year, month); // 某月第一天为星期几
 	}
+	
+//	public int getWeeksOfMonth() {
+//		int weeksOfMonth=0;
+//		// getCalendar(year, month);
+//		int preMonthRelax = 0;
+//		if (dayOfWeek != 7) {
+//			preMonthRelax = dayOfWeek;
+//		}
+//		if ((daysOfMonth + preMonthRelax) % 7 == 0) {
+//			weeksOfMonth = (daysOfMonth + preMonthRelax) / 7;
+//		} else {
+//			weeksOfMonth = (daysOfMonth + preMonthRelax) / 7 + 1;
+//		}
+//		return weeksOfMonth;
+//	}
+	
+//	/**
+//	 * 判断某年某月所有的星期数
+//	 * 
+//	 * @param year
+//	 * @param month
+//	 */
+//	public int getWeeksOfMonth(int year, int month) {
+//		// 先判断某月的第一天为星期几
+//		int preMonthRelax = 0;
+//		int dayFirst = getWhichDayOfWeek(year, month);
+//		int days = specialCalendar.getDaysOfMonth(specialCalendar.isLeapYear(year), month);
+//		if (dayFirst != 7) {
+//			preMonthRelax = dayFirst;
+//		}
+//		if ((days + preMonthRelax) % 7 == 0) {
+//			weeksOfMonth = (days + preMonthRelax) / 7;
+//		} else {
+//			weeksOfMonth = (days + preMonthRelax) / 7 + 1;
+//		}
+//		return weeksOfMonth;
+//
+//	}
 	
 	/**
 	 * 
@@ -689,7 +770,19 @@ public class TableMainActivity extends Activity implements OnGestureListener {
 	public boolean onTouchEvent(MotionEvent event) {
 		return this.gestureDetector.onTouchEvent(event);
 	}
+	
 
+//	/**
+//	 * 判断某年某月的第一天为星期几
+//	 * 
+//	 * @param year
+//	 * @param month
+//	 * @return
+//	 */
+//	public int getWhichDayOfWeek(int year, int month) {
+//		return specialCalendar.getWeekdayOfMonth(year, month);
+//	}
+//	
 	/**
 	 * 重新计算当前的年月
 	 */
@@ -735,6 +828,7 @@ public class TableMainActivity extends Activity implements OnGestureListener {
 		}
 
 	}
+	
 	
 	@Override
 	public boolean dispatchTouchEvent(MotionEvent ev) {

@@ -10,11 +10,75 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import javax.security.auth.PrivateCredentialPermission;
+
+import android.R.integer;
 import android.util.Log;
 
 public class MyTimeUtil {
 
 	private static final int WEEKDAYS = 7;
+	
+	/**
+	 * 
+	 * @param dayOfWeek
+	 * @param daysOfMonth
+	 * @param state  传人一个状态表示这个函数是经过处理后的getWeeksOfMonth函数
+	 * @return
+	 */
+
+	public static int getWeeksOfMonth(int dayOfWeek,int daysOfMonth,boolean state) {
+		int weeksOfMonth=0;
+		// getCalendar(year, month);
+		int preMonthRelax = 0;
+		if (dayOfWeek != 7) {
+			preMonthRelax = dayOfWeek;
+		}
+		if ((daysOfMonth + preMonthRelax) % 7 == 0) {
+			weeksOfMonth = (daysOfMonth + preMonthRelax) / 7;
+		} else {
+			weeksOfMonth = (daysOfMonth + preMonthRelax) / 7 + 1;
+		}
+		return weeksOfMonth;
+	}
+	
+	/**
+	 * 判断某年某月所有的星期数
+	 * 
+	 * @param year
+	 * @param month
+	 */
+	public static int getWeeksOfMonth(int year, int month) {
+		// 先判断某月的第一天为星期几
+		SpecialCalendar specialCalendar=new SpecialCalendar();
+		int weeksOfMonth=0;
+		int preMonthRelax = 0;
+		int dayFirst = getWhichDayOfWeek(year, month);
+		int days = specialCalendar.getDaysOfMonth(specialCalendar.isLeapYear(year), month);
+		if (dayFirst != 7) {
+			preMonthRelax = dayFirst;
+		}
+		if ((days + preMonthRelax) % 7 == 0) {
+			weeksOfMonth = (days + preMonthRelax) / 7;
+		} else {
+			weeksOfMonth = (days + preMonthRelax) / 7 + 1;
+		}
+		return weeksOfMonth;
+
+	}
+	
+	/**
+	 * 判断某年某月的第一天为星期几
+	 * 
+	 * @param year
+	 * @param month
+	 * @return
+	 */
+	public static int getWhichDayOfWeek(int year, int month) {
+		SpecialCalendar specialCalendar=new SpecialCalendar();
+		
+		return specialCalendar.getWeekdayOfMonth(year, month);
+	}
 
 	private static String[] WEEK = { "星期日", "星期一", "星期二", "星期三", "星期四", "星期五",
 			"星期六" };

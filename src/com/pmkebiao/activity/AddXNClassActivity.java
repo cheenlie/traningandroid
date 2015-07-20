@@ -1,4 +1,4 @@
-package com.pmkebiao.activity;
+ï»¿package com.pmkebiao.activity;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -60,16 +60,16 @@ public class AddXNClassActivity extends Activity implements OnTouchListener {
 	private int addWeekNo;
 	private int addDay;
 	private int addStartTime;
-	private int term;// ±ê¼ÇµÚ¼¸Ñ§ÆÚ 1-µÚÒ»Ñ§ÆÚ£¨9ÔÂ1ÈÕ-1ÔÂ15ÈÕ£© 2-µÚ¶şÑ§ÆÚ£¨3ÔÂ1ÈÕ-6ÔÂ30ÈÕ£©
+	private int term;// æ ‡è®°ç¬¬å‡ å­¦æœŸ 1-ç¬¬ä¸€å­¦æœŸï¼ˆ9æœˆ1æ—¥-1æœˆ15æ—¥ï¼‰ 2-ç¬¬äºŒå­¦æœŸï¼ˆ3æœˆ1æ—¥-6æœˆ30æ—¥ï¼‰
 	/**
-	 * ¼ÇÂ¼Ìí¼Ó¿Î³ÌÆğÊ¼ÖÜÎªµÚ¼¸ÖÜ
+	 * è®°å½•æ·»åŠ è¯¾ç¨‹èµ·å§‹å‘¨ä¸ºç¬¬å‡ å‘¨
 	 */
 	private int week;
 
 	private boolean addFinished = false;
 
 	/*
-	 * ½ÓÊÜ´«µİµÄ¿Î³ÌĞÅÏ¢Àà
+	 * æ¥å—ä¼ é€’çš„è¯¾ç¨‹ä¿¡æ¯ç±»
 	 */
 	private SingleClass scShow;
 
@@ -78,83 +78,83 @@ public class AddXNClassActivity extends Activity implements OnTouchListener {
 	private final int BEFORE_NUMBER = 8;
 	private final int BEHIND_NUMBER = 10;
 	private String TAG = AddCourseActivity.class.getSimpleName();
-	private String class_name; // ¿Î³ÌÃû ±ØÑ¡
-	private String class_type; // ¿Î³ÌÀà±ğ ±ØÑ¡
-	private int class_start_week = 1; // ÆğÊ¼ÖÜ ±ØÑ¡
-	private int class_stop_week = 1;// ½áÊøÖÜ
-	private int timers_total; // ×Ü´ÎÊı ±ØÑ¡
-	private int timers_oneweek = 1; // Ã¿ÖÜ´ÎÊı ±ØÑ¡
-	private String[] Class_each_week; // Ã¿´ÎÖÜ¼¸ÉÏ
-	private String[] Class_starttime; // ¿ªÊ¼Ê±¼ä
-	private String[] Class_finnishtime; // ÏÂ¿ÎÊ±¼ä
-	// private int class_cut; // ¼ÙÆÚ¿Û³ı´ÎÊı ¿ÉÑ¡
-	private String address; // ÉÏ¿ÎµØµã ¿ÉÑ¡ Í¨¹ı°Ù¶ÈµØÍ¼Ñ¡Ôñ
-	private int reminder; // ¿ÎÇ°ÌáĞÑ ¿ÉÑ¡ È±Ê¡ÊÇ²»´ò¹´µÄ£¬¼´²»ÌáĞÑ
-	private String moneycost = "100"; // ¿Î³Ì×Ü·ÑÓÃ ¿ÉÑ¡
-	private String others; // ×¢ÊÍ¿ÉÑ¡
+	private String class_name; // è¯¾ç¨‹å å¿…é€‰
+	private String class_type; // è¯¾ç¨‹ç±»åˆ« å¿…é€‰
+	private int class_start_week = 1; // èµ·å§‹å‘¨ å¿…é€‰
+	private int class_stop_week = 1;// ç»“æŸå‘¨
+	private int timers_total; // æ€»æ¬¡æ•° å¿…é€‰
+	private int timers_oneweek = 1; // æ¯å‘¨æ¬¡æ•° å¿…é€‰
+	private String[] Class_each_week; // æ¯æ¬¡å‘¨å‡ ä¸Š
+	private String[] Class_starttime; // å¼€å§‹æ—¶é—´
+	private String[] Class_finnishtime; // ä¸‹è¯¾æ—¶é—´
+	// private int class_cut; // å‡æœŸæ‰£é™¤æ¬¡æ•° å¯é€‰
+	private String address; // ä¸Šè¯¾åœ°ç‚¹ å¯é€‰ é€šè¿‡ç™¾åº¦åœ°å›¾é€‰æ‹©
+	private int reminder; // è¯¾å‰æé†’ å¯é€‰ ç¼ºçœæ˜¯ä¸æ‰“å‹¾çš„ï¼Œå³ä¸æé†’
+	private String moneycost = "100"; // è¯¾ç¨‹æ€»è´¹ç”¨ å¯é€‰
+	private String others; // æ³¨é‡Šå¯é€‰
 	private Handler handler;
 	private LinearLayout layout;
 	/**
-	 * ¿Î³ÌÃû±à¼­¿ò
+	 * è¯¾ç¨‹åç¼–è¾‘æ¡†
 	 */
 	private EditText class_name_edit;
 
 	/**
-	 * ¿Î³ÌÀà±ğÏÔÊ¾
+	 * è¯¾ç¨‹ç±»åˆ«æ˜¾ç¤º
 	 */
 	private TextView class_type_textview;
 
 	/**
-	 * ÆğÊ¼ÖÜÏÔÊ¾
+	 * èµ·å§‹å‘¨æ˜¾ç¤º
 	 */
 	private TextView class_start_week_textview;
 
 	/**
-	 * ½áÊøÖÜÏÔÊ¾
+	 * ç»“æŸå‘¨æ˜¾ç¤º
 	 */
 	private TextView stopweek_textview;
 
 	/**
-	 * ×Ü´ÎÊı±à¼­¿ò
+	 * æ€»æ¬¡æ•°ç¼–è¾‘æ¡†
 	 */
 	private EditText timers_total_edit;
 
 	/**
-	 * Ã¿ÖÜ´ÎÊıÏÂÀ­ÁĞ±í
+	 * æ¯å‘¨æ¬¡æ•°ä¸‹æ‹‰åˆ—è¡¨
 	 */
 	private Spinner timers_oneweek_spinner;
 
 	/**
-	 * Ã¿ÖÜÉÏ¿ÎÊ±¼äÁĞ±í
+	 * æ¯å‘¨ä¸Šè¯¾æ—¶é—´åˆ—è¡¨
 	 */
 	private ListView Class_each_weektime_listview;
 
 	/**
-	 * ¿ÎÇ°ÌáĞÑÏÂÀ­ÁĞ±í
+	 * è¯¾å‰æé†’ä¸‹æ‹‰åˆ—è¡¨
 	 */
 	private Spinner reminder_spinner;
 
 	/**
-	 * ¿Î³Ì×Ü·ÑÓÃ±à¼­¿ò
+	 * è¯¾ç¨‹æ€»è´¹ç”¨ç¼–è¾‘æ¡†
 	 */
 	private EditText moneycost_edit;
 
 	/**
-	 * ¶¥²¿ÓÒ²àÍê³ÉTextView
+	 * é¡¶éƒ¨å³ä¾§å®ŒæˆTextView
 	 */
 	private TextView right_textview;
 
 	/**
-	 * ÉÏ¿ÎµØµãtextview
+	 * ä¸Šè¯¾åœ°ç‚¹textview
 	 */
 	private TextView Textview_loction;
 	/**
-	 * ¶¥²¿×ó²à·µ»ØImageView
+	 * é¡¶éƒ¨å·¦ä¾§è¿”å›ImageView
 	 */
 	private ImageView left_imageview;
 
 	/**
-	 * ¶¥²¿ÖĞ¼ä±êÌâtextView
+	 * é¡¶éƒ¨ä¸­é—´æ ‡é¢˜textView
 	 */
 	TextView title_textView;
 
@@ -172,7 +172,7 @@ public class AddXNClassActivity extends Activity implements OnTouchListener {
 		manager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 
 		/*
-		 * Òş²Øactionbar
+		 * éšè—actionbar
 		 */
 		ActionBar maActionBar = getActionBar();
 		maActionBar.hide();
@@ -180,7 +180,7 @@ public class AddXNClassActivity extends Activity implements OnTouchListener {
 		getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
 		if (Constant.START_ADDCOURSEACTIVITY == Constant.EDIT_START) {
 			/**
-			 * Èç¹ûÎª±à¼­¿Î³ÌĞÅÏ¢£¬³õÊ¼»¯Êı¾İ´¦Àí
+			 * å¦‚æœä¸ºç¼–è¾‘è¯¾ç¨‹ä¿¡æ¯ï¼Œåˆå§‹åŒ–æ•°æ®å¤„ç†
 			 */
 			getIntentData();
 		} else {
@@ -193,7 +193,7 @@ public class AddXNClassActivity extends Activity implements OnTouchListener {
 
 		if (Constant.START_ADDCOURSEACTIVITY == Constant.EDIT_START) {
 			/**
-			 * Èç¹ûÎª±à¼­¿Î³ÌĞÅÏ¢
+			 * å¦‚æœä¸ºç¼–è¾‘è¯¾ç¨‹ä¿¡æ¯
 			 */
 			updataIntent();
 		} else {
@@ -206,7 +206,7 @@ public class AddXNClassActivity extends Activity implements OnTouchListener {
 				int what = msg.what;
 				if (what == Constant.ADD_START) {
 					if (http_code.equals("0")) {
-						Toast.makeText(AddXNClassActivity.this, "²åÈë", 800);
+						Toast.makeText(AddXNClassActivity.this, "æ’å…¥", 800);
 					} else {
 						Constant.noteChanged = true;
 						AddXNClassActivity.this.finish();
@@ -214,7 +214,7 @@ public class AddXNClassActivity extends Activity implements OnTouchListener {
 				}
 				if (what == Constant.EDIT_START) {
 					if (http_code.equals("0")) {
-						Toast.makeText(AddXNClassActivity.this, "±à¼­Ê§°Ü",800);
+						Toast.makeText(AddXNClassActivity.this, "ç¼–è¾‘å¤±è´¥",800);
 					} else {
 						Constant.noteChanged = true;
 						AddXNClassActivity.this.finish();
@@ -226,7 +226,7 @@ public class AddXNClassActivity extends Activity implements OnTouchListener {
 	}
 
 	/**
-	 * ³õÊ¼»¯»ñµÃµÄĞŞ¸ÄÖ®Ç°µÄĞÅÏ¢
+	 * åˆå§‹åŒ–è·å¾—çš„ä¿®æ”¹ä¹‹å‰çš„ä¿¡æ¯
 	 */
 	private void updataIntent() {
 
@@ -234,7 +234,7 @@ public class AddXNClassActivity extends Activity implements OnTouchListener {
 				R.array.every_week_number);
 
 		/*
-		 * Ã¿ÖÜ¿ÎÊı¸³³õÖµ
+		 * æ¯å‘¨è¯¾æ•°èµ‹åˆå€¼
 		 */
 
 		for (int i = 0; i < every_week_number_array.length; i++) {
@@ -247,21 +247,21 @@ public class AddXNClassActivity extends Activity implements OnTouchListener {
 		}
 
 		/*
-		 * Ãû×Ö¸³³õÖµ
+		 * åå­—èµ‹åˆå€¼
 		 */
 		class_name_edit.setText(scShow.getClass_name());
 		/*
-		 * ×Ü´ÎÊı¸³³õÖµ
+		 * æ€»æ¬¡æ•°èµ‹åˆå€¼
 		 */
 		timers_total_edit.setText(String.valueOf(cf.getTimers_total()));
 
 		/*
-		 * ¿Î³Ì»¨·Ñ¸³³õÖµ
+		 * è¯¾ç¨‹èŠ±è´¹èµ‹åˆå€¼
 		 */
 		moneycost_edit.setText(cf.getMoneycost());
 
 		/*
-		 * ³õÊ¼ÖÜ¸³³õÖµ
+		 * åˆå§‹å‘¨èµ‹åˆå€¼
 		 */
 		String weekStr;
 		class_start_week = cf.getClass_start_week();
@@ -269,7 +269,7 @@ public class AddXNClassActivity extends Activity implements OnTouchListener {
 		class_start_week_textview.setText(weekStr);
 
 		/*
-		 * ½áÊøÖÜ¸³Öµ
+		 * ç»“æŸå‘¨èµ‹å€¼
 		 */
 		int every = cf.getTimers_oneweek();
 		class_stop_week = class_start_week + cf.getTimers_total() / every - 1;
@@ -279,7 +279,7 @@ public class AddXNClassActivity extends Activity implements OnTouchListener {
 		weekStr = MyTimeUtil.getTheWeekStr(class_stop_week);
 		stopweek_textview.setText(weekStr);
 		/*
-		 * Ã¿ÖÜÉÏ¿ÎÊ±¼äÁĞ±í·Ö±ğ¸³³õÖµ
+		 * æ¯å‘¨ä¸Šè¯¾æ—¶é—´åˆ—è¡¨åˆ†åˆ«èµ‹åˆå€¼
 		 */
 
 		Thread ted = new Thread(new Runnable() {
@@ -297,7 +297,7 @@ public class AddXNClassActivity extends Activity implements OnTouchListener {
 
 								for (int i = 0; i < (cf.getClass_starttime().length - 1); i++) {
 
-									/* ĞÇÆÚĞèÒª×ª»» */
+									/* æ˜ŸæœŸéœ€è¦è½¬æ¢ */
 
 									Resources res = getResources();
 									String[] dayOfWeekArray = res
@@ -399,7 +399,7 @@ public class AddXNClassActivity extends Activity implements OnTouchListener {
 		ted.start();
 
 		/**
-		 * ÉÏ¿ÎµØµã¸³³õÖµ
+		 * ä¸Šè¯¾åœ°ç‚¹èµ‹åˆå€¼
 		 */
 		if (scShow.getLocation() == null || scShow.getLocation().equals("null")) {
 			String input_location = getString(R.string.input_location);
@@ -416,7 +416,7 @@ public class AddXNClassActivity extends Activity implements OnTouchListener {
 	}
 
 	/**
-	 * »ñµÃËùĞŞ¸Ä¿Î³ÌµÄĞÅÏ¢
+	 * è·å¾—æ‰€ä¿®æ”¹è¯¾ç¨‹çš„ä¿¡æ¯
 	 */
 	private void getIntentData() {
 		Intent intent = this.getIntent();
@@ -427,7 +427,7 @@ public class AddXNClassActivity extends Activity implements OnTouchListener {
 	}
 
 	/**
-	 * Ìí¼ÓÊ± »ñµÃ³õÊ¼Öµ
+	 * æ·»åŠ æ—¶ è·å¾—åˆå§‹å€¼
 	 */
 	private void addGetIntentData() {
 		Intent intent = this.getIntent();
@@ -437,7 +437,7 @@ public class AddXNClassActivity extends Activity implements OnTouchListener {
 	}
 
 	/**
-	 * Ìí¼ÓÊ±³õÊ¼»¯
+	 * æ·»åŠ æ—¶åˆå§‹åŒ–
 	 */
 	private void addUpDateIntent() {
 
@@ -471,7 +471,7 @@ public class AddXNClassActivity extends Activity implements OnTouchListener {
 		myTimeStartStopAdapter.timeStop.set(0, timeStopHourStr + ":" + "00");
 
 		/**
-		 * ³õÊ¼ÖÜ¸³³õÖµ
+		 * åˆå§‹å‘¨èµ‹åˆå€¼
 		 */
 
 		String dateStr;
@@ -483,14 +483,14 @@ public class AddXNClassActivity extends Activity implements OnTouchListener {
 		String stopDateStr;
 		if (term == 1) {
 			/*
-			 * µÚÒ»Ñ§ÆÚ
+			 * ç¬¬ä¸€å­¦æœŸ
 			 */
 			startDateStr = date[0] + "." + "09" + "." + "01";
 			stopDateStr = (Integer.parseInt(date[0]) + 1) + "." + "01" + "."
 					+ "15";
 		} else {
 			/*
-			 * µÚ¶şÑ§ÆÚ
+			 * ç¬¬äºŒå­¦æœŸ
 			 */
 
 			startDateStr = date[0] + "." + "03" + "." + "01";
@@ -501,13 +501,13 @@ public class AddXNClassActivity extends Activity implements OnTouchListener {
 		class_start_week = MyTimeUtil.getWeeks(startDateStr);
 
 		/**
-		 * ½áÊøÖÜ¸³Öµ
+		 * ç»“æŸå‘¨èµ‹å€¼
 		 */
 		stopweek_textview.setText(MyTimeUtil.getWeekFirstAndLastDay(stopDateStr));
 		class_stop_week = MyTimeUtil.getWeeks(stopDateStr);
 
 		/*
-		 * ×Ü´ÎÊı¸³Öµ
+		 * æ€»æ¬¡æ•°èµ‹å€¼
 		 */
 		timers_total = (1 + class_stop_week - class_start_week)
 				* timers_oneweek;
@@ -516,7 +516,7 @@ public class AddXNClassActivity extends Activity implements OnTouchListener {
 	}
 
 	/**
-	 * ³õÊ¼»¯ÊÊÅäÆ÷
+	 * åˆå§‹åŒ–é€‚é…å™¨
 	 */
 	private void initAdapter() {
 		mInflator = getLayoutInflater();
@@ -526,7 +526,7 @@ public class AddXNClassActivity extends Activity implements OnTouchListener {
 		loadDataForTimeList(timers_oneweek);
 
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy.MM.dd");
-		Date nowDate = new Date(System.currentTimeMillis());// »ñÈ¡µ±Ç°Ê±¼ä
+		Date nowDate = new Date(System.currentTimeMillis());// è·å–å½“å‰æ—¶é—´
 		String dateStr = simpleDateFormat.format(nowDate);
 
 		class_start_week_textview.setText(MyTimeUtil.getWeekFirstAndLastDay(dateStr));
@@ -537,19 +537,19 @@ public class AddXNClassActivity extends Activity implements OnTouchListener {
 	int startNumber = 0;
 
 	/**
-	 * ¸ù¾İËùÑ¡Ã¿ÖÜÉÏ¿Î´ÎÊıÌí¼Ó¿Î³ÌÉÏ¿ÎÊ±¼äÁĞ±í
+	 * æ ¹æ®æ‰€é€‰æ¯å‘¨ä¸Šè¯¾æ¬¡æ•°æ·»åŠ è¯¾ç¨‹ä¸Šè¯¾æ—¶é—´åˆ—è¡¨
 	 */
 	private void loadDataForTimeList(int number) {
 
 		if (number > myTimeStartStopAdapter.getCount()) {
 			/**
-			 * Ñ¡ÔñÃ¿ÖÜ´ÎÊıÔö¼ÓÁË
+			 * é€‰æ‹©æ¯å‘¨æ¬¡æ•°å¢åŠ äº†
 			 */
 			int count = myTimeStartStopAdapter.getCount();
 
 			if (Constant.START_ADDCOURSEACTIVITY == Constant.ADD_START) {
 				/**
-				 * Ìí¼Ó¿Î³Ì
+				 * æ·»åŠ è¯¾ç¨‹
 				 */
 
 				Resources res = getResources();
@@ -558,7 +558,7 @@ public class AddXNClassActivity extends Activity implements OnTouchListener {
 
 					for (int j = 0; j < 7; j++) {
 						/**
-						 * È·¶¨Ç°ÃæµÄ¿Î³ÌÎªĞÇÆÚ¼¸£¬·½±ãºóÃæ¿Î³ÌÔÚĞÇÆÚÉÏË³¼Ó
+						 * ç¡®å®šå‰é¢çš„è¯¾ç¨‹ä¸ºæ˜ŸæœŸå‡ ï¼Œæ–¹ä¾¿åé¢è¯¾ç¨‹åœ¨æ˜ŸæœŸä¸Šé¡ºåŠ 
 						 */
 						if (myTimeStartStopAdapter.getDayOfWeekStr(count - 1)
 								.equals(dayOfWeekArray[j])) {
@@ -583,20 +583,20 @@ public class AddXNClassActivity extends Activity implements OnTouchListener {
 										.getTimeMinStop(count - 1),
 								dayOfWeekArray[startNumber]);
 					} else {
-						myTimeStartStopAdapter.addItem(13, 0, 14, 0, "ĞÇÆÚÈÕ");
+						myTimeStartStopAdapter.addItem(13, 0, 14, 0, "æ˜ŸæœŸæ—¥");
 					}
 
 				}
 			} else {
 				/**
-				 * ±à¼­¿Î³Ì
+				 * ç¼–è¾‘è¯¾ç¨‹
 				 */
 				Resources res = getResources();
 				String[] dayOfWeekArray = res.getStringArray(R.array.oneDayOfWeek);
 				if (isFirst > 1) {
 					for (int j = 0; j < 7; j++) {
 						/**
-						 * È·¶¨Ç°ÃæµÄ¿Î³ÌÎªĞÇÆÚ¼¸£¬·½±ãºóÃæ¿Î³ÌÔÚĞÇÆÚÉÏË³¼Ó
+						 * ç¡®å®šå‰é¢çš„è¯¾ç¨‹ä¸ºæ˜ŸæœŸå‡ ï¼Œæ–¹ä¾¿åé¢è¯¾ç¨‹åœ¨æ˜ŸæœŸä¸Šé¡ºåŠ 
 						 */
 						if (myTimeStartStopAdapter.getDayOfWeekStr(count - 1)
 								.equals(dayOfWeekArray[j])) {
@@ -621,14 +621,14 @@ public class AddXNClassActivity extends Activity implements OnTouchListener {
 										.getTimeMinStop(count - 1),
 								dayOfWeekArray[startNumber]);
 					} else {
-						myTimeStartStopAdapter.addItem(13, 0, 14, 0, "ĞÇÆÚÈÕ");
+						myTimeStartStopAdapter.addItem(13, 0, 14, 0, "æ˜ŸæœŸæ—¥");
 					}
 				}
 
 			}
 		} else if (number <= myTimeStartStopAdapter.getCount()) {
 			/**
-			 * Ñ¡ÔñÃ¿ÖÜ´ÎÊı¼õÉÙÁË
+			 * é€‰æ‹©æ¯å‘¨æ¬¡æ•°å‡å°‘äº†
 			 */
 			int count = myTimeStartStopAdapter.getCount();
 			for (int i = 0; i < (count - number); i++) {
@@ -749,12 +749,12 @@ public class AddXNClassActivity extends Activity implements OnTouchListener {
 	}
 
 	/**
-	 * ³õÊ¼»¯½çÃæ
+	 * åˆå§‹åŒ–ç•Œé¢
 	 */
 	private void initView() {
 		class_name_edit = (EditText) this.findViewById(R.id.coursename_edittext);
 //		class_type_textview = (TextView) findViewById(R.id.class_type_textview);
-		class_type_textview.setText("Ğ£ÄÚ¿Î");
+		class_type_textview.setText("æ ¡å†…è¯¾");
 		class_start_week_textview = (TextView) this.findViewById(R.id.startweek_textview);
 		stopweek_textview = (TextView) findViewById(R.id.stopweek_textview);
 		timers_total_edit = (EditText) this.findViewById(R.id.total_number_edittext);
@@ -790,7 +790,7 @@ public class AddXNClassActivity extends Activity implements OnTouchListener {
 		layout.setOnTouchListener(this);
 
 		/*
-		 * Òş²ØÈí¼üÅÌ
+		 * éšè—è½¯é”®ç›˜
 		 */
 		InputMethodManager imm = (InputMethodManager) this.getSystemService(Context.INPUT_METHOD_SERVICE);
 		imm.hideSoftInputFromWindow(class_name_edit.getWindowToken(), 0);
@@ -802,7 +802,7 @@ public class AddXNClassActivity extends Activity implements OnTouchListener {
 			Intent intent) {
 
 		switch (resultCode) {
-		// resultCodeÎª»Ø´«µÄ±ê¼Ç£¬ÎÒÔÚBÖĞ»Ø´«µÄÊÇRESULT_OK
+		// resultCodeä¸ºå›ä¼ çš„æ ‡è®°ï¼Œæˆ‘åœ¨Bä¸­å›ä¼ çš„æ˜¯RESULT_OK
 		case RESULT_OK:
 			location_tem = intent.getStringExtra("location");
 			String s = new String(location_tem);
@@ -835,7 +835,7 @@ public class AddXNClassActivity extends Activity implements OnTouchListener {
 			String date = yearSrt + "." + monthStr + "." + dayofMonthStr;
 			if (requestCode == 1) {
 				/**
-				 * ÆğÊ¼ÖÜÑ¡ÔñÊÂ¼ş
+				 * èµ·å§‹å‘¨é€‰æ‹©äº‹ä»¶
 				 */
 				class_start_week_textview.setText(MyTimeUtil
 						.getWeekFirstAndLastDay(date));
@@ -843,7 +843,7 @@ public class AddXNClassActivity extends Activity implements OnTouchListener {
 
 				if (class_start_week > class_stop_week) {
 					/**
-					 * Ñ¡ÔñµÄ½áÊøÖÜÔçÓÚÆğÊ¼ÖÜ
+					 * é€‰æ‹©çš„ç»“æŸå‘¨æ—©äºèµ·å§‹å‘¨
 					 */
 					class_stop_week = class_start_week;
 					stopweek_textview.setText(MyTimeUtil
@@ -852,7 +852,7 @@ public class AddXNClassActivity extends Activity implements OnTouchListener {
 				}
 			} else {
 				/**
-				 * ½áÊøÖÜÑ¡ÔñÊÂ¼ş
+				 * ç»“æŸå‘¨é€‰æ‹©äº‹ä»¶
 				 */
 				stopweek_textview.setText(MyTimeUtil
 						.getWeekFirstAndLastDay(date));
@@ -862,7 +862,7 @@ public class AddXNClassActivity extends Activity implements OnTouchListener {
 						* timers_oneweek;
 				if (timers_total <= 0) {
 					/**
-					 * Ñ¡ÔñµÄ½áÊøÖÜÔçÓÚÆğÊ¼ÖÜ
+					 * é€‰æ‹©çš„ç»“æŸå‘¨æ—©äºèµ·å§‹å‘¨
 					 */
 					class_start_week = class_stop_week;
 					class_start_week_textview.setText(MyTimeUtil
@@ -882,7 +882,7 @@ public class AddXNClassActivity extends Activity implements OnTouchListener {
 	@Override
 	protected void onResume() {
 		/*
-		 * Òş²ØÈí¼üÅÌ
+		 * éšè—è½¯é”®ç›˜
 		 */
 		InputMethodManager imm = (InputMethodManager) this
 				.getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -891,7 +891,7 @@ public class AddXNClassActivity extends Activity implements OnTouchListener {
 	}
 
 	/**
-	 * ³õÊ¼»¯¶¥²¿TopBar
+	 * åˆå§‹åŒ–é¡¶éƒ¨TopBar
 	 */
 	public void initTopBar() {
 //		right_textview = (TextView) this.findViewById(R.id.right_tx);
@@ -918,7 +918,7 @@ public class AddXNClassActivity extends Activity implements OnTouchListener {
 						.getSelectedItem().toString());
 
 				/*
-				 * Èç¹û×Ü´ÎÊıÒÑ¾­ÌîĞ´£¬Ôò¶ÔÆä½øĞĞĞŞ¸Ä£¬±£³ÖÆğÊ¼ÖÜºÍ½áÊøÖÜ²»±ä
+				 * å¦‚æœæ€»æ¬¡æ•°å·²ç»å¡«å†™ï¼Œåˆ™å¯¹å…¶è¿›è¡Œä¿®æ”¹ï¼Œä¿æŒèµ·å§‹å‘¨å’Œç»“æŸå‘¨ä¸å˜
 				 */
 				if (!timers_total_edit.getText().toString().equals("")) {
 					timers_total = (class_stop_week - class_start_week + 1)
@@ -939,52 +939,52 @@ public class AddXNClassActivity extends Activity implements OnTouchListener {
 	}
 
 	/*
-	 * ±ê¼ÇÑ¡ÔñµÄÊ±¼äÊÇ·ñĞ¡ÓÚ8µã;
+	 * æ ‡è®°é€‰æ‹©çš„æ—¶é—´æ˜¯å¦å°äº8ç‚¹;
 	 */
 	private boolean timeLess6 = false;
 
 	/**
-	 * »ñµÃÓÃ»§Ìí¼ÓµÄĞÅÏ¢
+	 * è·å¾—ç”¨æˆ·æ·»åŠ çš„ä¿¡æ¯
 	 */
 	public ClassInfo getDataAdd() {
 
 		/*
-		 * »ñÈ¡¿Î³ÌÃû
+		 * è·å–è¯¾ç¨‹å
 		 */
 		class_name = class_name_edit.getText().toString();
 
 		/*
-		 * »ñÈ¡¿Î³ÌÀàĞÍ
+		 * è·å–è¯¾ç¨‹ç±»å‹
 		 */
-		class_type = "Ğ£ÄÚ¿Î";
+		class_type = "æ ¡å†…è¯¾";
 
 		/*
-		 * »ñÈ¡¿ªÊ¼ÖÜ
+		 * è·å–å¼€å§‹å‘¨
 		 */
 		// class_start_week =
 		// MyTimeUtil.getWeeks(class_start_week_textview.getText().toString());
 		/*
-		 * »ñÈ¡×Ü´ÎÊı
+		 * è·å–æ€»æ¬¡æ•°
 		 */
 		timers_total = Integer.parseInt(timers_total_edit.getText().toString());
 		/*
-		 * »ñÈ¡Ã¿ÖÜ´ÎÊı
+		 * è·å–æ¯å‘¨æ¬¡æ•°
 		 */
 		timers_oneweek = Integer.parseInt(timers_oneweek_spinner
 				.getSelectedItem().toString());
 
 		/*
-		 * »ñÈ¡ÉÏ¿ÎÊ±¼äÊı×é
+		 * è·å–ä¸Šè¯¾æ—¶é—´æ•°ç»„
 		 */
-		Class_each_week = new String[myTimeStartStopAdapter.getCount()];// Ã¿´ÎÖÜ¼¸ÉÏ
-		// Ğ¡Ê±:·ÖÖÓ
-		Class_starttime = new String[myTimeStartStopAdapter.getCount()];// ¿ªÊ¼Ê±¼ä
-		// Ğ¡Ê±:·ÖÖÓ
-		Class_finnishtime = new String[myTimeStartStopAdapter.getCount()];// ½áÊøÊ±¼ä
+		Class_each_week = new String[myTimeStartStopAdapter.getCount()];// æ¯æ¬¡å‘¨å‡ ä¸Š
+		// å°æ—¶:åˆ†é’Ÿ
+		Class_starttime = new String[myTimeStartStopAdapter.getCount()];// å¼€å§‹æ—¶é—´
+		// å°æ—¶:åˆ†é’Ÿ
+		Class_finnishtime = new String[myTimeStartStopAdapter.getCount()];// ç»“æŸæ—¶é—´
 		for (int i = 0; i < myTimeStartStopAdapter.getCount(); i++) {
 
 			/*
-			 * Ã¿ÖÜµÄĞÇÆÚ¼¸ÉÏ¿Î£¨ĞèÒª×ª»» ĞÇÆÚÒ»¶ÔÓ¦¡°1¡±£¬ĞÇÆÚ¶ş¶ÔÓ¦¡°2¡±£¬ĞÇÆÚÈÕ¶ÔÓ¦¡°0¡±£©
+			 * æ¯å‘¨çš„æ˜ŸæœŸå‡ ä¸Šè¯¾ï¼ˆéœ€è¦è½¬æ¢ æ˜ŸæœŸä¸€å¯¹åº”â€œ1â€ï¼Œæ˜ŸæœŸäºŒå¯¹åº”â€œ2â€ï¼Œæ˜ŸæœŸæ—¥å¯¹åº”â€œ0â€ï¼‰
 			 */
 			String dayString = myTimeStartStopAdapter.getDayOfWeekStr(i);
 			Resources res = getResources();
@@ -998,12 +998,12 @@ public class AddXNClassActivity extends Activity implements OnTouchListener {
 			}
 
 			/*
-			 * ÉÏ¿Î¿ªÊ¼Ê±¼ä
+			 * ä¸Šè¯¾å¼€å§‹æ—¶é—´
 			 */
 			Class_starttime[i] = myTimeStartStopAdapter.getTimeStart(i);
 
 			/*
-			 * ÉÏ¿Î½áÊøÊ±¼ä
+			 * ä¸Šè¯¾ç»“æŸæ—¶é—´
 			 */
 			Class_finnishtime[i] = myTimeStartStopAdapter.geTimeStop(i);
 
@@ -1017,7 +1017,7 @@ public class AddXNClassActivity extends Activity implements OnTouchListener {
 		classTimeSort(Class_each_week, Class_starttime, Class_finnishtime);
 
 		/**
-		 * »ñµÃµØÖ·
+		 * è·å¾—åœ°å€
 		 */
 		if (location_tem != null) {
 			String s = new String(location_tem);
@@ -1029,13 +1029,13 @@ public class AddXNClassActivity extends Activity implements OnTouchListener {
 		}
 
 		/*
-		 * »ñµÃ¿ÎÇ°ÌáĞÑÊ±¼ä
+		 * è·å¾—è¯¾å‰æé†’æ—¶é—´
 		 */
 
 		reminder = 0;
 
 		/*
-		 * »ñÈ¡×Ü·ÑÓÃ
+		 * è·å–æ€»è´¹ç”¨
 		 */
 		moneycost = moneycost_edit.getText().toString();
 		if (moneycost.isEmpty()) {
@@ -1043,7 +1043,7 @@ public class AddXNClassActivity extends Activity implements OnTouchListener {
 		}
 
 		/*
-		 * »ñÈ¡±¸×¢
+		 * è·å–å¤‡æ³¨
 		 */
 
 		// others = others_edit.getText().toString();
@@ -1051,7 +1051,7 @@ public class AddXNClassActivity extends Activity implements OnTouchListener {
 			others = "0";
 		}
 		/*
-		 * if (others.isEmpty()) { others = "ÎŞ"; }
+		 * if (others.isEmpty()) { others = "æ— "; }
 		 */
 		ClassInfo addClass_info = new ClassInfo(class_name, class_type,
 				class_start_week, timers_total, timers_oneweek,
@@ -1062,14 +1062,14 @@ public class AddXNClassActivity extends Activity implements OnTouchListener {
 	}
 
 	/**
-	 * ¶ÔÒ»ÖÜµÄÉÏ¿ÎÊ±¼ä½øĞĞÅÅĞò£¬Ê¹Æä°´ÔÚÏÔÊ¾µÄGridlayoutÖĞ´Ó×óµ½ÓÒ£¬´ÓÉÏµ½ÏÂÉıĞò
+	 * å¯¹ä¸€å‘¨çš„ä¸Šè¯¾æ—¶é—´è¿›è¡Œæ’åºï¼Œä½¿å…¶æŒ‰åœ¨æ˜¾ç¤ºçš„Gridlayoutä¸­ä»å·¦åˆ°å³ï¼Œä»ä¸Šåˆ°ä¸‹å‡åº
 	 * 
 	 * @param class_each_week2
-	 *            ĞÇÆÚ¼¸ÉÏ¿ÎµÄÊı×é (ĞÇÆÚÒ»Îª¡°1¡±£¬ĞÇÆÚÈÕÎª¡°0¡±)
+	 *            æ˜ŸæœŸå‡ ä¸Šè¯¾çš„æ•°ç»„ (æ˜ŸæœŸä¸€ä¸ºâ€œ1â€ï¼Œæ˜ŸæœŸæ—¥ä¸ºâ€œ0â€)
 	 * @param class_starttime2
-	 *            ¿Î³Ì¿ªÊ¼Ê±¼äµÄÊı×é
+	 *            è¯¾ç¨‹å¼€å§‹æ—¶é—´çš„æ•°ç»„
 	 * @param class_finnishtime2
-	 *            ¿Î³Ì½áÊøÊ±¼äµÄÊı×é
+	 *            è¯¾ç¨‹ç»“æŸæ—¶é—´çš„æ•°ç»„
 	 */
 	private void classTimeSort(String[] class_each_week2,
 			String[] class_starttime2, String[] class_finnishtime2) {
@@ -1098,7 +1098,7 @@ public class AddXNClassActivity extends Activity implements OnTouchListener {
 	}
 
 	/**
-	 * ½»»»Èı¸öÊı×é ÖĞµÄi ºÍjÔªËØ
+	 * äº¤æ¢ä¸‰ä¸ªæ•°ç»„ ä¸­çš„i å’Œjå…ƒç´ 
 	 * 
 	 * @param class_each_week2
 	 * @param class_starttime2
@@ -1134,45 +1134,45 @@ public class AddXNClassActivity extends Activity implements OnTouchListener {
 			if (Constant.START_ADDCOURSEACTIVITY == Constant.ADD_START) {
 				if (arg0 == right_textview) {
 					/**
-					 * Ìí¼Ó¿Î³Ì
+					 * æ·»åŠ è¯¾ç¨‹
 					 */
 					if (class_name_edit.getText().toString().isEmpty()) {
 						Toast.makeText(AddXNClassActivity.this,
-								"ÇëÕıÈ·ÌîĞ´¿Î³ÌÃû", 1000).show();
+								"è¯·æ­£ç¡®å¡«å†™è¯¾ç¨‹å", 1000).show();
 					} else if (timers_total_edit.getText().toString().isEmpty()) {
 						Toast.makeText(AddXNClassActivity.this,
-								"ÇëÕıÈ·ÌîĞ´¿Î³Ì×Ü´ÎÊı", 1000).show();
+								"è¯·æ­£ç¡®å¡«å†™è¯¾ç¨‹æ€»æ¬¡æ•°", 1000).show();
 					} else if (Integer.parseInt(timers_oneweek_spinner
 							.getSelectedItem().toString()) > Integer
 							.parseInt(timers_total_edit.getText().toString())) {
 						Toast.makeText(AddXNClassActivity.this,
-								"ÉÏ¿Î×Ü´ÎÊı²»ÄÜĞ¡ÓÚÃ¿ÖÜÉÏ¿Î´ÎÊı£¬ÇëĞŞ¸Ä£¡", 1500).show();
+								"ä¸Šè¯¾æ€»æ¬¡æ•°ä¸èƒ½å°äºæ¯å‘¨ä¸Šè¯¾æ¬¡æ•°ï¼Œè¯·ä¿®æ”¹ï¼", 1500).show();
 					} else if (NetworkState.isCon(AddXNClassActivity.this) == false) {
-						Toast.makeText(AddXNClassActivity.this, "Çë¼ì²éÍøÂç£¡",
+						Toast.makeText(AddXNClassActivity.this, "è¯·æ£€æŸ¥ç½‘ç»œï¼",
 								1500).show();
 					} else if (Integer.parseInt(timers_total_edit.getText()
 							.toString()) > 366
 							|| Integer.parseInt(timers_total_edit.getText()
 									.toString()) < 1) {
 						Toast.makeText(AddXNClassActivity.this,
-								"ÉÏ¿Î×Ü´ÎÊıÓ¦ÔÚ1-366Ö®¼ä£¬ÇëĞŞ¸Ä£¡", 1500).show();
+								"ä¸Šè¯¾æ€»æ¬¡æ•°åº”åœ¨1-366ä¹‹é—´ï¼Œè¯·ä¿®æ”¹ï¼", 1500).show();
 					} else {
 						timeLess6 = false;
 						aaaaa = getDataAdd();
 //						CheckClassTimeUtil check = new CheckClassTimeUtil(Class_each_week, Class_starttime,Class_finnishtime);
 						if (timeLess6) {
 							Toast.makeText(AddXNClassActivity.this,
-									"Îª±£Ö¤º¢×ÓĞİÏ¢£¬Çë²»ÒªÈÃÉÏ¿ÎÊ±¼äÔçÓÚ8µã£¡", 1500).show();
+									"ä¸ºä¿è¯å­©å­ä¼‘æ¯ï¼Œè¯·ä¸è¦è®©ä¸Šè¯¾æ—¶é—´æ—©äº8ç‚¹ï¼", 1500).show();
 //						} else if (check.checkConflict()) {
 							/**
-							 * Ê±¼ä³åÍ»
+							 * æ—¶é—´å†²çª
 							 */
 							Toast.makeText(AddXNClassActivity.this,
-									"ÄúÑ¡ÔñµÄÊ±¼äÓĞ³åÍ»,Çë¼ì²é", 1500).show();
+									"æ‚¨é€‰æ‹©çš„æ—¶é—´æœ‰å†²çª,è¯·æ£€æŸ¥", 1500).show();
 						} else {
 							ProgressDialog pp = new ProgressDialog(
 									AddXNClassActivity.this);
-							pp.setMessage("²Ù×÷ÖĞ£¬ÇëÉÔºò¡­¡­");
+							pp.setMessage("æ“ä½œä¸­ï¼Œè¯·ç¨å€™â€¦â€¦");
 							pp.show();
 							right_textview.setClickable(false);
 
@@ -1231,31 +1231,31 @@ public class AddXNClassActivity extends Activity implements OnTouchListener {
 				if (arg0 == right_textview) {
 
 					/**
-					 * ±à¼­¿Î³ÌÍê³É°´Å¥
+					 * ç¼–è¾‘è¯¾ç¨‹å®ŒæˆæŒ‰é’®
 					 */
 
 					DBOperation dbo = new DBOperation();
 
 					if (class_name_edit.getText().toString().isEmpty()) {
 						Toast.makeText(AddXNClassActivity.this,
-								"ÇëÕıÈ·ÌîĞ´¿Î³ÌÃû", 1000).show();
+								"è¯·æ­£ç¡®å¡«å†™è¯¾ç¨‹å", 1000).show();
 					} else if (timers_total_edit.getText().toString().isEmpty()) {
 						Toast.makeText(AddXNClassActivity.this,
-								"ÇëÕıÈ·ÌîĞ´¿Î³Ì×Ü´ÎÊı", 1000).show();
+								"è¯·æ­£ç¡®å¡«å†™è¯¾ç¨‹æ€»æ¬¡æ•°", 1000).show();
 					} else if (Integer.parseInt(timers_oneweek_spinner
 							.getSelectedItem().toString()) > Integer
 							.parseInt(timers_total_edit.getText().toString())) {
 						Toast.makeText(AddXNClassActivity.this,
-								"ÉÏ¿Î×Ü´ÎÊı²»ÄÜĞ¡ÓÚÃ¿ÖÜÉÏ¿Î´ÎÊı£¬ÇëĞŞ¸Ä£¡", 1500).show();
+								"ä¸Šè¯¾æ€»æ¬¡æ•°ä¸èƒ½å°äºæ¯å‘¨ä¸Šè¯¾æ¬¡æ•°ï¼Œè¯·ä¿®æ”¹ï¼", 1500).show();
 					} else if (NetworkState.isCon(AddXNClassActivity.this) == false) {
-						Toast.makeText(AddXNClassActivity.this, "Çë¼ì²éÍøÂç£¡",
+						Toast.makeText(AddXNClassActivity.this, "è¯·æ£€æŸ¥ç½‘ç»œï¼",
 								1500).show();
 					} else if (Integer.parseInt(timers_total_edit.getText()
 							.toString()) > 366
 							|| Integer.parseInt(timers_total_edit.getText()
 									.toString()) < 1) {
 						Toast.makeText(AddXNClassActivity.this,
-								"ÉÏ¿Î×Ü´ÎÊıÓ¦ÔÚ1-366Ö®¼ä£¬ÇëĞŞ¸Ä£¡", 1500).show();
+								"ä¸Šè¯¾æ€»æ¬¡æ•°åº”åœ¨1-366ä¹‹é—´ï¼Œè¯·ä¿®æ”¹ï¼", 1500).show();
 					} else {
 
 						timeLess6 = false;
@@ -1264,20 +1264,20 @@ public class AddXNClassActivity extends Activity implements OnTouchListener {
 //								Class_finnishtime);
 						if (timeLess6) {
 							Toast.makeText(AddXNClassActivity.this,
-									"Îª±£Ö¤º¢×ÓĞİÏ¢£¬Çë²»ÒªÈÃÉÏ¿ÎÊ±¼äÔçÓÚ8µã£¡", 1500).show();
+									"ä¸ºä¿è¯å­©å­ä¼‘æ¯ï¼Œè¯·ä¸è¦è®©ä¸Šè¯¾æ—¶é—´æ—©äº8ç‚¹ï¼", 1500).show();
 //						} else if (check.checkConflict()) {
 							/**
-							 * Ê±¼ä³åÍ»
+							 * æ—¶é—´å†²çª
 							 */
 							Toast.makeText(AddXNClassActivity.this,
-									"ÄúÑ¡ÔñµÄÊ±¼äÓĞ³åÍ»,Çë¼ì²é", 1500).show();
+									"æ‚¨é€‰æ‹©çš„æ—¶é—´æœ‰å†²çª,è¯·æ£€æŸ¥", 1500).show();
 						}
 
 						AlertDialog.Builder builder = new AlertDialog.Builder(
 								AddXNClassActivity.this);
-						builder.setMessage("Èç¹û±¾¿Î³ÌÓĞ±Ê¼Ç¼ÇÂ¼£¬±à¼­¿Î³Ì»á¶ªÊ§±Ê¼Ç£¡ÊÇ·ñ¼ÌĞø£¿")
+						builder.setMessage("å¦‚æœæœ¬è¯¾ç¨‹æœ‰ç¬”è®°è®°å½•ï¼Œç¼–è¾‘è¯¾ç¨‹ä¼šä¸¢å¤±ç¬”è®°ï¼æ˜¯å¦ç»§ç»­ï¼Ÿ")
 								.setCancelable(true)
-								.setPositiveButton("¼ÌĞø",
+								.setPositiveButton("ç»§ç»­",
 										new DialogInterface.OnClickListener() {
 
 											@Override
@@ -1287,7 +1287,7 @@ public class AddXNClassActivity extends Activity implements OnTouchListener {
 
 												ProgressDialog pp = new ProgressDialog(
 														AddXNClassActivity.this);
-												pp.setMessage("²Ù×÷ÖĞ£¬ÇëÉÔºò¡­¡­");
+												pp.setMessage("æ“ä½œä¸­ï¼Œè¯·ç¨å€™â€¦â€¦");
 												pp.show();
 												right_textview
 														.setClickable(false);
@@ -1343,7 +1343,7 @@ public class AddXNClassActivity extends Activity implements OnTouchListener {
 
 											}
 										});
-						// ÓÃ¶Ô»°¿ò¹¹ÔìÆ÷´´½¨¶Ô»°¿ò
+						// ç”¨å¯¹è¯æ¡†æ„é€ å™¨åˆ›å»ºå¯¹è¯æ¡†
 						AlertDialog alert = builder.create();
 						alert.show();
 					}
@@ -1357,7 +1357,7 @@ public class AddXNClassActivity extends Activity implements OnTouchListener {
 	}
 
 	/**
-	 * Ê±¼älistViewÊÊÅäÆ÷
+	 * æ—¶é—´listViewé€‚é…å™¨
 	 * 
 	 * @author wangyuepeng
 	 */
@@ -1384,7 +1384,7 @@ public class AddXNClassActivity extends Activity implements OnTouchListener {
 		}
 
 		/**
-		 * ÏòÁĞ±íÖĞÌí¼ÓÒ»Ìõ
+		 * å‘åˆ—è¡¨ä¸­æ·»åŠ ä¸€æ¡
 		 */
 		public void addItem(int HourStart, int MinStart, int HourStop,
 				int MinStop, String oneDayOfWeek) {
@@ -1419,7 +1419,7 @@ public class AddXNClassActivity extends Activity implements OnTouchListener {
 		}
 
 		/**
-		 * É¾³ı×îºóÒ»Ìõ
+		 * åˆ é™¤æœ€åä¸€æ¡
 		 */
 		public void deleteLast() {
 
@@ -1434,7 +1434,7 @@ public class AddXNClassActivity extends Activity implements OnTouchListener {
 		}
 
 		/**
-		 * Çå³ıÁĞ±í
+		 * æ¸…é™¤åˆ—è¡¨
 		 */
 		public void clear() {
 			count = 0;
@@ -1577,7 +1577,7 @@ public class AddXNClassActivity extends Activity implements OnTouchListener {
 							}, timeHourStart.get(arg0), timeMinStart.get(arg0)
 
 							/**
-							 * true±íÊ¾24Ğ¡Ê±¸ñÊ½
+							 * trueè¡¨ç¤º24å°æ—¶æ ¼å¼
 							 */
 							, true);
 					startTimePickerDialog.show();
@@ -1638,7 +1638,7 @@ public class AddXNClassActivity extends Activity implements OnTouchListener {
 							}, timeHourStop.get(arg0), timeMinStop.get(arg0)
 
 							/**
-							 * true±íÊ¾24Ğ¡Ê±¸ñÊ½
+							 * trueè¡¨ç¤º24å°æ—¶æ ¼å¼
 							 */
 							, true).show();
 				}
@@ -1649,7 +1649,7 @@ public class AddXNClassActivity extends Activity implements OnTouchListener {
 			holder.timeStopTextView.setText(timeStop.get(arg0));
 
 			/*
-			 * È·¶¨³õÊ¼ÊÇÖÜ¼¸
+			 * ç¡®å®šåˆå§‹æ˜¯å‘¨å‡ 
 			 */
 			String[] dayweekStr = getResources().getStringArray(
 					R.array.oneDayOfWeek);
@@ -1666,7 +1666,7 @@ public class AddXNClassActivity extends Activity implements OnTouchListener {
 	}
 
 	/**
-	 * ÓÃÓÚ°ïÖú²¼¾Ö
+	 * ç”¨äºå¸®åŠ©å¸ƒå±€
 	 * 
 	 * @author wangyuepeng
 	 */
