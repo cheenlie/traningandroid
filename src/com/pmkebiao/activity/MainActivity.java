@@ -1,6 +1,6 @@
 package com.pmkebiao.activity;
 
-import com.letv.course.R;
+import com.pmkebiao.course.R;
 import android.os.Bundle;
 import android.app.ActionBar;
 import android.app.TabActivity;

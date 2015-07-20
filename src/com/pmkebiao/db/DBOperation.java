@@ -912,15 +912,13 @@ public class DBOperation {
 		}
 	}
 
-	public ArrayList<SingleClass> return_week_total_class(Context context,
-			int week_no, int child_id) {
+	public ArrayList<SingleClass> return_week_total_class(Context context,	int week_no, int child_id) {
 
 		ArrayList<SingleClass> al = new ArrayList<SingleClass>();
 		DBCreater db = new DBCreater(context, "myclass.db");
 		SQLiteDatabase sqliteDatabase = db.getReadableDatabase();
 		Cursor cursor = sqliteDatabase.rawQuery(
-				"select  * from Classes where week_no='" + week_no
-						+ "'and child_id='" + child_id + "'", null);
+				"select  * from Classes where week_no='" + week_no	+ "'and child_id='" + child_id + "'", null);
 
 		while (cursor.moveToNext()) {
 

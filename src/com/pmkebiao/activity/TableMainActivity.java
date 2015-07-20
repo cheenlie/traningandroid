@@ -9,7 +9,7 @@ import java.util.Date;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import com.letv.course.R;
+import com.pmkebiao.course.R;
 import com.pmkebiao.dao.SingleClass;
 import com.pmkebiao.db.*;
 import com.pmkebiao.timetable.DateAdapter;
@@ -18,18 +18,17 @@ import com.pmkebiao.timetable.SpecialCalendar;
 import com.pmkebiao.util.Constant;
 
 import android.R.color;
+import android.R.drawable;
+import android.R.layout;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.DialogInterface.OnClickListener;
 import android.content.DialogInterface.OnShowListener;
-import android.gesture.Gesture;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.TextUtils.TruncateAt;
@@ -37,10 +36,12 @@ import android.util.Log;
 import android.view.GestureDetector;
 import android.view.GestureDetector.OnGestureListener;
 import android.view.View.OnTouchListener;
+import android.view.animation.AnimationUtils;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.DatePicker;
 import android.widget.GridLayout;
 import android.widget.GridView;
@@ -48,7 +49,6 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.widget.ViewFlipper;
 import android.widget.LinearLayout.LayoutParams;
 
@@ -80,7 +80,7 @@ public class TableMainActivity extends Activity implements OnGestureListener {
 	private int selectPostion = 0;
 	private String dayNumbers[] = new String[7];
 
-	private SpecialCalendar sc = null;
+	private SpecialCalendar specialCalendar = null;
 	private DateAdapter dateAdapter; 
 	private RelativeLayout relativelayout_main_contain_flipper_timelist;
 	private GestureDetector gestureDetector=null;
@@ -88,30 +88,91 @@ public class TableMainActivity extends Activity implements OnGestureListener {
 	 * updateGridlayout方法专属变量
 	 */
 	View saveView;
-	ArrayList<View> tv_id = new ArrayList<View>();
-	int update_count = 0;   //更新网格的次数统计
+	ArrayList<View> viewArrayList = new ArrayList<View>();
+	int updateGridViewCount = 0;   //更新网格的次数统计
+	LinearLayout linearlayout;
+	
+	private boolean setbackground = true;
+	public static int childid;   //
+	public static int weekAdd;
+	View vSave;    //
+	int height = 0;
+	int heightTotal = 0;
+	int scrollHeightDistanceBy8Hour;
+	int scrollHeightOnePX;
+	int widPx;  //
+	ScrollView tableScrollView;  //
+	
+	public TableMainActivity() {
+		Date date = new Date();
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-M-d");
+		currentDate = simpleDateFormat.format(date);
+		year_c = Integer.parseInt(currentDate.split("-")[0]);
+		month_c = Integer.parseInt(currentDate.split("-")[1]);
+		day_c = Integer.parseInt(currentDate.split("-")[2]);
+		currentYear = year_c;
+		currentMonth = month_c;
+		specialCalendar = new SpecialCalendar();
+		getCalendar(year_c, month_c);
+		week_num = getWeeksOfMonth();
+		currentNum = week_num;
+		
+		if (dayOfWeek == 7) {
+			week_c = day_c / 7 + 1;
+		} else {
+			if (day_c <= (7 - dayOfWeek)) {
+				week_c = 1;
+			} else {
+				if ((day_c - (7 - dayOfWeek)) % 7 == 0) {
+					week_c = (day_c - (7 - dayOfWeek)) / 7 + 1;
+				} else {
+					week_c = (day_c - (7 - dayOfWeek)) / 7 + 2;
+				}
+			}
+		}
+		currentWeek = week_c;
+		Log.e(TAG + "currentWeek----1", String.valueOf(currentWeek));
+		getCurrent();
 
+	}
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
-		setContentView(R.layout.activity_main);
+		setContentView(R.layout.activity_main);  //显示整个table的activity
 		relativelayout_main_contain_flipper_timelist = (RelativeLayout) findViewById(R.id.relativelayout_main_all_contain_flipper_timelist);
-		timeListGrid = (GridLayout) findViewById(R.id.timeList_gridlayout);
-		flipper_day=(ViewFlipper) findViewById(R.id.main_flipper_day);
+		
+		linearlayout = (LinearLayout) findViewById(R.id.linearLayout);  //给gridview层加上触摸监听器
+		linearlayout.setOnTouchListener(new OnTouchListener() {
+			@Override
+			public boolean onTouch(View v, MotionEvent event) {
+				return TableMainActivity.this.gestureDetector.onTouchEvent(event);
+			}
+		});
+		
+		tableScrollView=(ScrollView) findViewById(R.id.table_scrollView); //线性布局中加一个scrollview
+		
+		WindowManager wm = this.getWindowManager();
+		int width = wm.getDefaultDisplay().getWidth();
+		widPx = (width - dipTopx(TableMainActivity.this, 25)) / 7;
+		
+		timeListGrid = (GridLayout) findViewById(R.id.timeList_gridlayout);//scroll_view中加一个gridlayout，显示时间列表
+		flipper_day=(ViewFlipper) findViewById(R.id.main_flipper_day);  //显示周一到周日
 		
 		gestureDetector=new GestureDetector(this); 
 		dateAdapter=new DateAdapter(this,  year_c, month_c, week_c, week_num, selectPostion, currentWeek==1?false:true);
 //		dateAdapter=new DateAdapter(this, getResources(), year_c, month_c, week_c, week_num, selectPostion, currentWeek==1?false:true);
 		addGridView();
+		
 		//向flipper中添加的数据
 		dayNumbers=dateAdapter.getDayNumbers();
 		gridView.setAdapter(dateAdapter);
+		selectPostion=dateAdapter.getTodayPosition();
 		gridView.setSelection(selectPostion);
 		//更改星期日上方的数据
-//		flipper_day.addView(gridView,0);
-		flipper_day.addView(gridView);
+		flipper_day.addView(gridView,0);
+//		flipper_day.addView(gridView);
 		
 		//获取系统当前时间
 		Date date = new Date();
@@ -139,147 +200,104 @@ public class TableMainActivity extends Activity implements OnGestureListener {
 		}).start();
 	}
 	
-	private boolean setbackground = true;
-	public static int childid;   //
-	public static int weekAdd;
-	View vSave;    //
-	int height = 0;
-	int heightTotal = 0;
-	int scrollHeight;
-	int scrollHeightOne;
-	int widPx;  //
-	
-	ScrollView scrollView1;  //
-	
-	 /**
-     * 根据手机的分辨率从 dp 的单位 转成为 px(像素)
-     * 
-     * dp=dip,不同手机显示效果不同，不依赖像素，
-     * px不同设备显示效果一样
-     * sp: scaled pixels(放大像素). 主要用于字体显示best for textsize
-     */
-	public int dipTopx(Context context, float pxValue) {
-
-		final float scale = context.getResources().getDisplayMetrics().density;
-		return (int) (pxValue * scale + 0.5f);
-	}
-	
-	
-	private void updateGridlayout(int week, GridLayout grid) {
+	private void updateGridlayout(int weekOfClassBegin, GridLayout tableGridLayout) {
 		
-		scrollHeight = 0;
+		scrollHeightDistanceBy8Hour = 0;
 		heightTotal = (dipTopx(TableMainActivity.this, 56));
-		scrollHeightOne = (dipTopx(TableMainActivity.this, 60));
-		weekAdd = week;
+		scrollHeightOnePX = (dipTopx(TableMainActivity.this, 60));
+		weekAdd = weekOfClassBegin;
 		height = (dipTopx(TableMainActivity.this, 60)) / 6 - 4;
 		
 		try {
-			if (tv_id.size() == 0) {
+			
+			if (viewArrayList.size() == 0) {
 			} else {
-				for (int i = 0; i < tv_id.size(); i++) {
-					grid.removeView(tv_id.get(i));
+				for (int i = 0; i < viewArrayList.size(); i++) {
+					tableGridLayout.removeView(viewArrayList.get(i));
 				}
-				tv_id.clear();
+				viewArrayList.clear();
 			}
 			
-			if (update_count == 0) {
-				for (int i = 1; i < grid.getColumnCount(); i++) {
-					for (int j = 0; j < (grid.getRowCount()); j++) {
+			if (updateGridViewCount == 0) {
+				for (int i = 1; i < tableGridLayout.getColumnCount(); i++) {
+					for (int j = 0; j < (tableGridLayout.getRowCount()); j++) {
 
 						/**
 						 * 显示每个小单元格
 						 */
-						TextView btn = new TextView(this);
-						btn.setWidth(widPx - 4);
-						btn.setHeight(height);
-						btn.setText("  ");
-						btn.setGravity(Gravity.CENTER);
-						btn.setTextColor(Color.DKGRAY);
+						TextView nullTextView = new TextView(this);
+						nullTextView.setWidth(widPx - 4);
+						nullTextView.setHeight(height);
+						nullTextView.setText("  ");
+						nullTextView.setGravity(Gravity.CENTER);
+						nullTextView.setTextColor(Color.DKGRAY);
 
-						GridLayout.Spec rowSpec = GridLayout.spec(j); // 设置它的行和列
-						GridLayout.Spec columnSpec = GridLayout.spec(i);
-						GridLayout.LayoutParams params = new GridLayout.LayoutParams(rowSpec, columnSpec);
-						params.setGravity(Gravity.FILL_VERTICAL);
+						GridLayout.Spec rowSpecStartAndSize = GridLayout.spec(j); // 设置它的行和列
+						GridLayout.Spec columnSpecStart = GridLayout.spec(i);
+						GridLayout.LayoutParams layoutParams = new GridLayout.LayoutParams(rowSpecStartAndSize, columnSpecStart);
+						layoutParams.setGravity(Gravity.FILL_VERTICAL);
 						RelativeLayout mylayout = new RelativeLayout(this);
-						RelativeLayout.LayoutParams s = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.MATCH_PARENT);
-						s.addRule(RelativeLayout.CENTER_IN_PARENT, -1);
+						RelativeLayout.LayoutParams relativeLayoutParams = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.MATCH_PARENT);
+						relativeLayoutParams.addRule(RelativeLayout.CENTER_IN_PARENT, -1);
 						mylayout.setPadding(2, 2, 2, 2);
-						mylayout.addView(btn, s);
-						grid.addView(mylayout, params);
+						mylayout.addView(nullTextView, relativeLayoutParams);
+						tableGridLayout.addView(mylayout, layoutParams);
 
 					}
 				}
 			} else {
 
 			}
-			if (update_count == 0) {
+			if (updateGridViewCount == 0) {
 				/**
 				 * 6个小格合并为一个大格，用于处理点击添加课程事件，显示加号
 				 */
-				for (int i = 1; i < grid.getColumnCount(); i++) {
-					for (int j = 0; j < (grid.getRowCount() / 6); j++) {
-						TextView btn = new TextView(this);
-						btn.setWidth(widPx - 4);
-						btn.setHeight(heightTotal);
-						btn.setText("  ");
-						btn.setGravity(Gravity.CENTER);
-						btn.setTextColor(Color.DKGRAY);
-						final int week1 = week;
+				for (int i = 1; i < tableGridLayout.getColumnCount(); i++) {
+					for (int j = 0; j < (tableGridLayout.getRowCount() / 6); j++) {
+						TextView nullTV = new TextView(this);
+						nullTV.setWidth(widPx - 4);
+						nullTV.setHeight(heightTotal);
+						nullTV.setText("  ");
+						nullTV.setGravity(Gravity.CENTER);
+						nullTV.setTextColor(Color.DKGRAY);
+						final int week1 = weekOfClassBegin;
 						final int day = i - 1;
-						final int starttime = j + 8;
+						final int startTimeDistanceBy8Hour = j + 8;
 
-						btn.setOnClickListener(new View.OnClickListener() {
+						nullTV.setOnClickListener(new View.OnClickListener() {
 
 							@Override
 							public void onClick(View v) {
+								
 								if (vSave != null) {
 									if (vSave == v) {
 										vSave.setBackground(null);
 										vSave = null;
 										AlertDialog.Builder builder = new AlertDialog.Builder(TableMainActivity.this);
-										builder.setMessage("添加课程")
-												.setCancelable(true)
-												.setPositiveButton(
+										builder.setMessage("添加课程").setCancelable(true).
+														setPositiveButton(
 														"课外班",
 														new DialogInterface.OnClickListener() {
-															public void onClick(
-																	DialogInterface dialog,
-																	int id) {
+															public void onClick(DialogInterface dialog,	int id) {
 																setbackground = false;
-																Intent intent = new Intent(TableMainActivity.this,
-																		AddCourseActivity.class);
-																intent.putExtra(
-																		"weekno",
-																		weekAdd);
-																intent.putExtra(
-																		"weekday",
-																		day);
-																intent.putExtra(
-																		"starttime",
-																		starttime);
+																Intent intent = new Intent(TableMainActivity.this,AddCourseActivity.class);
+																intent.putExtra("weekno",weekAdd);
+																intent.putExtra("classDayOfWeek",day);
+																intent.putExtra("startTimeDistanceBy8Hour",startTimeDistanceBy8Hour);
 																Constant.START_ADDCOURSEACTIVITY = Constant.ADD_START;
 																startActivity(intent);
 															}
-														})
-												.setNegativeButton(
+														}).setNegativeButton(
 														"校内课",
 														new DialogInterface.OnClickListener() {
-															public void onClick(
-																	DialogInterface dialog,
-																	int id) {
+															public void onClick(DialogInterface dialog,int id) {
 																setbackground = false;
-//																Intent intent = new Intent(TableMainActivity.this,	AddClassXiaoneiActivity.class);
-//																intent.putExtra(
-//																		"weekno",
-//																		weekAdd);
-//																intent.putExtra(
-//																		"weekday",
-//																		day);
-//																intent.putExtra(
-//																		"starttime",
-//																		starttime);
-//																Constant.START_ADDCOURSEACTIVITY = Constant.ADD_START;
-//																startActivity(intent);
+																Intent intent = new Intent(TableMainActivity.this,	AddXNClassActivity.class);
+																intent.putExtra("weekno",weekAdd);
+																intent.putExtra("classDayOfWeek",day);
+																intent.putExtra("startTimeDistanceBy8Hour",startTimeDistanceBy8Hour);
+																Constant.START_ADDCOURSEACTIVITY = Constant.ADD_START;
+																startActivity(intent);
 															}
 														});
 										// 用对话框构造器创建对话框
@@ -301,17 +319,18 @@ public class TableMainActivity extends Activity implements OnGestureListener {
 						
 						});
 						
-						GridLayout.Spec rowSpec = GridLayout.spec(j * 6, 6); // 设置它的行和列
-						GridLayout.Spec columnSpec = GridLayout.spec(i);
-						GridLayout.LayoutParams params = new GridLayout.LayoutParams(rowSpec, columnSpec);
-						params.setGravity(Gravity.FILL_VERTICAL);
-						// grid.addView(btn, params);
-						RelativeLayout mylayout = new RelativeLayout(this);
-						RelativeLayout.LayoutParams s = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.MATCH_PARENT);
-						s.addRule(RelativeLayout.CENTER_IN_PARENT, -1);
-						mylayout.setPadding(2, 2, 2, 2);
-						mylayout.addView(btn, s);
-						grid.addView(mylayout, params);
+						GridLayout.Spec rowSpecStartAndSize = GridLayout.spec(j * 6, 6); // 设置它的行和列
+						GridLayout.Spec columnSpecStart = GridLayout.spec(i);
+						GridLayout.LayoutParams gridLayoutParams = new GridLayout.LayoutParams(rowSpecStartAndSize, columnSpecStart);
+						gridLayoutParams.setGravity(Gravity.FILL_VERTICAL);
+						// grid.addView(btn, layoutParams);
+						RelativeLayout myRelativeLayout = new RelativeLayout(this);
+						RelativeLayout.LayoutParams relatvieLayoutParams = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.MATCH_PARENT);
+						relatvieLayoutParams.addRule(RelativeLayout.CENTER_IN_PARENT, -1);
+						myRelativeLayout.setPadding(2, 2, 2, 2);
+						//相对布局里面放入相对布局的的视图和参数
+						myRelativeLayout.addView(nullTV, relatvieLayoutParams);
+						tableGridLayout.addView(myRelativeLayout, gridLayoutParams);
 
 					}
 				}
@@ -321,36 +340,39 @@ public class TableMainActivity extends Activity implements OnGestureListener {
 
 			DBOperation dbo = new DBOperation();
 
-			ArrayList<SingleClass> al_sc = dbo.return_week_total_class(this,week, childid);
-			if (al_sc.size() > 0) {
-				scrollHeight = Integer.parseInt(al_sc.get(0).getClass_starttime().split(":")[0]) - 8;
+			ArrayList<SingleClass> singleClassArrayList = dbo.return_week_total_class(this,weekOfClassBegin, childid);
+			if (singleClassArrayList.size() > 0) {
+				scrollHeightDistanceBy8Hour = Integer.parseInt(singleClassArrayList.get(0).getClass_starttime().split(":")[0]) - 8;
 			}
 			
-			for (int i = 0; i < al_sc.size(); i++) {
+			for (int i = 0; i < singleClassArrayList.size(); i++) {
 
-				SingleClass sc = al_sc.get(i);
-				TextView tv_sc = new TextView(this);
+				SingleClass singleClass = singleClassArrayList.get(i);
+				TextView singleClassTV = new TextView(this);
 
-				tv_sc.setWidth(widPx - 4);
-				tv_sc.setGravity(Gravity.CENTER);
-				tv_sc.setTextColor(Color.WHITE);
-				tv_sc.setMaxLines(2);
-				tv_sc.setEllipsize(TruncateAt.END);
-				if (sc.getClass_type().equals("文化课")) {
-					tv_sc.setBackgroundResource(R.drawable.corner_view_wh);
-				} else if (sc.getClass_type().equals("艺术课")) {
-					tv_sc.setBackgroundResource(R.drawable.corner_view_ys);
-				} else if (sc.getClass_type().equals("体育课")) {
-					tv_sc.setBackgroundResource(R.drawable.corner_view_ty);
-				} else if (sc.getClass_type().equals("其他")) {
-					tv_sc.setBackgroundResource(R.drawable.corner_view_qt);
+				singleClassTV.setWidth(widPx - 4);
+				singleClassTV.setGravity(Gravity.CENTER);
+				singleClassTV.setTextColor(Color.WHITE);
+				singleClassTV.setMaxLines(2);
+				singleClassTV.setEllipsize(TruncateAt.END);
+				if (singleClass.getClass_type().equals("文化课")) {
+					singleClassTV.setBackgroundResource(R.drawable.corner_view_wh);
+				} else if (singleClass.getClass_type().equals("艺术课")) {
+					singleClassTV.setBackgroundResource(R.drawable.corner_view_ys);
+				} else if (singleClass.getClass_type().equals("体育课")) {
+					singleClassTV.setBackgroundResource(R.drawable.corner_view_ty);
+				} else if (singleClass.getClass_type().equals("其他")) {
+					singleClassTV.setBackgroundResource(R.drawable.corner_view_qt);
 				} else {
-					tv_sc.setBackgroundResource(R.drawable.corner_view_1);
+					singleClassTV.setBackgroundResource(R.drawable.corner_view_1);
 				}
 
-				tv_sc.setText(sc.getClass_name());
-				final SingleClass sc2 = sc;
-				tv_sc.setOnClickListener(new View.OnClickListener() {
+				singleClassTV.setText(singleClass.getClass_name());
+				
+//				final SingleClass sc2 = singleClass;
+				
+				//点击小课进入小课详细信息页面
+				singleClassTV.setOnClickListener(new View.OnClickListener() {
 					@Override
 					public void onClick(View v) {
 						/**
@@ -366,159 +388,82 @@ public class TableMainActivity extends Activity implements OnGestureListener {
 					}
 				});
 
-				String starttimearr[] = sc.getClass_starttime().split(":");
-				String stoptimearr[] = sc.getClass_finishtime().split(":");
-
-				int start_time = Integer.parseInt(starttimearr[0]);
-				int finish_time = Integer.parseInt(stoptimearr[0]);
-				int start_min;
-				int finish_min;
-				if (starttimearr.length > 1 && stoptimearr.length > 1) {
-					start_min = Integer.parseInt(starttimearr[1]);
-					finish_min = Integer.parseInt(stoptimearr[1]);
+				String startTimeArray[] = singleClass.getClass_starttime().split(":");
+				String stopTimeArray[] = singleClass.getClass_finishtime().split(":");
+				//获得小课的开始和结束时间
+				int startTimeByHour = Integer.parseInt(startTimeArray[0]);
+				int finishTimeByHour = Integer.parseInt(stopTimeArray[0]);
+				
+				int startTimeByMinute;
+				int finishTimeByMinute;
+				if (startTimeArray.length > 1 && stopTimeArray.length > 1) {
+					startTimeByMinute = Integer.parseInt(startTimeArray[1]);
+					finishTimeByMinute = Integer.parseInt(stopTimeArray[1]);
 				} else {
-					start_min = 0;
-					finish_min = 0;
+					startTimeByMinute = 0;
+					finishTimeByMinute = 0;
 				}
-
-				int space = 1;
-				space = (finish_time - start_time) * 6
-						+ (finish_min / 10 - start_min / 10);
-				if (space <= 4) {
-					tv_sc.setMaxLines(1);
-					tv_sc.setEllipsize(TruncateAt.END);
+				//以十分钟为单位计算间隔数
+				int spacePerTenMinute= 1;
+				spacePerTenMinute = (finishTimeByHour - startTimeByHour) * 6 + (finishTimeByMinute / 10 - startTimeByMinute / 10);
+				if (spacePerTenMinute <= 4) {
+					singleClassTV.setMaxLines(1);
+					singleClassTV.setEllipsize(TruncateAt.END);
 				}
-				if (space <= 2) {
-					tv_sc.setText("");
-					tv_sc.setTextSize(3);
+				if (spacePerTenMinute <= 2) {
+					singleClassTV.setText("");
+					singleClassTV.setTextSize(3);
 				}
-				int weekday = (sc.getWeek_day() + 1);
-				int starttime = (start_time - 8);
-				if (starttime < scrollHeight) {
-					scrollHeight = starttime;
+				
+				//小课是周几上课
+				int classDayOfWeek = (singleClass.getWeek_day() + 1);
+				int startTimeDistanceBy8Hour = (startTimeByHour - 8);
+				
+				if (startTimeDistanceBy8Hour < scrollHeightDistanceBy8Hour) {
+					scrollHeightDistanceBy8Hour = startTimeDistanceBy8Hour;
 				}
-				GridLayout.Spec rowSpec = GridLayout.spec(
-						(starttime * 6 + (start_min / 10)), space);
-				GridLayout.Spec columnSpec = GridLayout.spec(weekday);
-				GridLayout.LayoutParams params = new GridLayout.LayoutParams(rowSpec, columnSpec);
-				params.setGravity(Gravity.FILL_VERTICAL);
-				RelativeLayout mylayout = new RelativeLayout(this);
+				
+				//多少行开始及其长度，egandroid.widget.GridLayout.spec(int start, int size)
+				GridLayout.Spec rowSpecStartAndSize = GridLayout.spec((startTimeDistanceBy8Hour * 6 + (startTimeByMinute / 10)), spacePerTenMinute);
+				GridLayout.Spec columnSpecStart = GridLayout.spec(classDayOfWeek);
+				GridLayout.LayoutParams layoutParams = new GridLayout.LayoutParams(rowSpecStartAndSize, columnSpecStart);
+				layoutParams.setGravity(Gravity.FILL_VERTICAL);
+				RelativeLayout classRelativeLayout = new RelativeLayout(this);
 				RelativeLayout.LayoutParams s = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.MATCH_PARENT);
 				s.addRule(RelativeLayout.CENTER_IN_PARENT, -1);
-				mylayout.setPadding(2, 2, 2, 2);
-				mylayout.addView(tv_sc, s);
-				grid.addView(mylayout, params);
-				tv_id.add(mylayout);
+				classRelativeLayout.setPadding(2, 2, 2, 2);
+				classRelativeLayout.addView(singleClassTV, s);
+				tableGridLayout.addView(classRelativeLayout, layoutParams);
+				
+				viewArrayList.add(classRelativeLayout);
 			}
-			update_count++;
+			updateGridViewCount++;
 
-			if (scrollHeight != 0) {
-				Handler mHandler = new Handler();
-				mHandler.post(new Runnable() {
+			//用handler的post来更新UI
+			if (scrollHeightDistanceBy8Hour != 0) {
+				Handler updateTableScrollViewHandler = new Handler();
+				updateTableScrollViewHandler.post(new Runnable() {
 					@Override
 					public void run() {
-						scrollView1.scrollTo(0,	(scrollHeight * scrollHeightOne));
-						Log.e("height", scrollHeight + "");
+						tableScrollView.scrollTo(0,	(scrollHeightDistanceBy8Hour * scrollHeightOnePX));
+						Log.e("height", scrollHeightDistanceBy8Hour + "");
 					}
 				});
 			} else {
-				Handler mHandler = new Handler();
-				mHandler.post(new Runnable() {
+				Handler updateTableScrollViewHandler = new Handler();
+				updateTableScrollViewHandler.post(new Runnable() {
 					@Override
 					public void run() {
 						/**
 						 * 滑动到顶部
 						 */
-						scrollView1.scrollTo(0, 0);
+						tableScrollView.scrollTo(0, 0);
 
 					}
 				});
 			}
 		} catch (Exception e) {
-			Log.d("111", e.toString());
 		}
-
-		/*
-		try {
-			if (tv_id.size() == 0) {
-			} else {
-				for (int i = 0; i < tv_id.size(); i++) {
-					grid.removeView(tv_id.get(i));
-				}
-				tv_id.clear();
-
-			}
-			
-			if (update_count == 0) {
-				int m=grid.getColumnCount();  //8
-				int n=grid.getRowCount();     //18
-				for (int i = 1; i < grid.getColumnCount(); i++)
-					for (int j = 0; j < grid.getRowCount(); j++) {
-						TextView btTextView = new TextView(this);
-						btTextView.setWidth(139);
-						btTextView.setHeight(100);
-						btTextView.setText("  ");
-						btTextView.setGravity(Gravity.CENTER);
-
-						btTextView.setTextColor(Color.DKGRAY);
-						final int week1 = week;
-						final int day = i - 1;
-						final int starttime = j + 6;
-
-						btTextView.setOnClickListener(new View.OnClickListener() {
-							
-							@Override
-							public void onClick(View v) {
-								
-								//saveView保存某日某时课程的view
-								if (saveView != null) {
-									if (saveView == v) {
-										saveView.setBackground(null);
-										saveView = null;
-										Intent intent = new Intent(TableMainActivity.this,AddCourseActivity.class);
-										intent.putExtra("weekno", week1);
-										intent.putExtra("weekday", day);
-										intent.putExtra("starttime", starttime);
-										Constant.START_ADDCOURSEACTIVITY = Constant.ADD_START;
-										startActivity(intent);
-									} else {
-										saveView.setBackground(null);
-										v.setBackgroundResource(R.drawable.jiahao_1);
-										v.getBackground().setAlpha(70);
-										saveView = v;
-									}
-								} else {
-									saveView = v;
-									saveView.setBackgroundResource(R.drawable.jiahao_1);
-									saveView.getBackground().setAlpha(70);
-								}
-							}
-
-							
-						});
-						//确定行号和列号
-						GridLayout.Spec rowSpec = GridLayout.spec(j); 
-						GridLayout.Spec columnSpec = GridLayout.spec(i);
-						//Constructs a new LayoutParams instance for this rowSpec and columnSpec
-						GridLayout.LayoutParams params = new GridLayout.LayoutParams(rowSpec, columnSpec);
-						params.setGravity(Gravity.FILL_VERTICAL);
-						
-						RelativeLayout mylayout = new RelativeLayout(this);
-						RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.MATCH_PARENT);
-						layoutParams.addRule(RelativeLayout.CENTER_IN_PARENT, -1);
-						//setPadding(int left, int top, int right, int bottom)
-						mylayout.setPadding(26, 16,26, 16);
-						mylayout.addView(btTextView, layoutParams);
-						
-						//在网格指定列和行号中添加textview控件
-						grid.addView(mylayout, params);
-
-					}
-			} 
-			
-		} catch (Exception e) {
-			
-		}*/
 
 	}
 
@@ -526,7 +471,7 @@ public class TableMainActivity extends Activity implements OnGestureListener {
 	 * 绘制一周7天的网格，既星期上面一行表示天的数字
 	 */
 	private void addGridView() {
-		LinearLayout.LayoutParams params=new LinearLayout.LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
+		LinearLayout.LayoutParams layoutParams=new LinearLayout.LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
 		gridView=new GridView(this);
 		gridView.setNumColumns(7);
 		gridView.setGravity(Gravity.CENTER_VERTICAL);
@@ -541,14 +486,90 @@ public class TableMainActivity extends Activity implements OnGestureListener {
 			}
 		});
 		
-		gridView.setLayoutParams(params);
+		gridView.setLayoutParams(layoutParams);
 		
 	}
 
+	/**
+	 * 判断手势的函数
+	 * 鼠标手势相当于一个向量（当然有可能手势是曲线），e1为向量的起点，e2为向量的终点，velocityX为向量水平方向的速度，velocityY为向量垂直方向的速度
+	 */
 	@Override
-	public boolean onTouchEvent(MotionEvent event) {
+	public boolean onFling(MotionEvent beginePoint, MotionEvent endPoint, float velocityX,	float velocityY) {
+		int gvFlag = 0;
+		if (beginePoint.getX() - endPoint.getX() > 240) {
+			// 向左滑
+			addGridView();
+			currentWeek++;
+			getCurrent();
+//			dateAdapter = new DateAdapter(this, getResources(), currentYear,currentMonth, currentWeek, currentNum, selectPostion,currentWeek == 1 ? true : false);
+			dateAdapter = new DateAdapter(this,  currentYear,currentMonth, currentWeek, currentNum, selectPostion,currentWeek == 1 ? true : false);
+			dayNumbers = dateAdapter.getDayNumbers();
+			gridView.setAdapter(dateAdapter);
+			gvFlag++;
+			flipper_day.addView(gridView, gvFlag);
 
-		return this.gestureDetector.onTouchEvent(event);
+			/**
+			 * 汪修改 只把当前日期表红
+			 */
+			Calendar c111 = Calendar.getInstance();
+			if (c111.get(Calendar.YEAR) == dateAdapter	.getCurrentYear(selectPostion)	&& (c111.get(Calendar.MONTH) + 1) == dateAdapter.getCurrentMonth(selectPostion)
+					&& c111.get(Calendar.DAY_OF_MONTH) == Integer.parseInt(dayNumbers[selectPostion])) {
+				dateAdapter.setSeclection(selectPostion);
+			}
+
+			this.flipper_day.setInAnimation(AnimationUtils.loadAnimation(this,	R.anim.push_left_in));
+			this.flipper_day.setOutAnimation(AnimationUtils.loadAnimation(this,R.anim.push_left_out));
+			this.flipper_day.showNext();
+			flipper_day.removeViewAt(0);
+			weeks_nowBetween20140922++;
+			updateGridlayout(weeks_nowBetween20140922, timeListGrid);
+			main_topbar_spinner.setText(MyTimeUtil.getTheWeekStrMonthAndDay(weeks_nowBetween20140922));
+			/*
+			 * 更新顶部的下拉列表
+			 */
+			/*
+			 * setTopBarSpinnerItems();
+			 */
+			return true;
+
+		} else if (beginePoint.getX() - endPoint.getX() < -240) {
+			addGridView();
+			currentWeek--;
+			getCurrent();
+//			dateAdapter = new DateAdapter(this, getResources(), currentYear,currentMonth, currentWeek, currentNum, selectPostion,currentWeek == 1 ? true : false);
+			dateAdapter = new DateAdapter(this, currentYear,currentMonth, currentWeek, currentNum, selectPostion,currentWeek == 1 ? true : false);
+			dayNumbers = dateAdapter.getDayNumbers();
+			gridView.setAdapter(dateAdapter);
+			//tvDate.setText(dateAdapter.getCurrentMonth(selectPostion) + "月");
+			gvFlag++;
+			flipper_day.addView(gridView, gvFlag);
+
+			/**
+			 * 汪修改 只把当前日期标记
+			 */
+			Calendar c111 = Calendar.getInstance();
+			if (c111.get(Calendar.YEAR) == dateAdapter.getCurrentYear(selectPostion)
+					&& (c111.get(Calendar.MONTH) + 1) == dateAdapter.getCurrentMonth(selectPostion)
+					&& c111.get(Calendar.DAY_OF_MONTH) == Integer.parseInt(dayNumbers[selectPostion])) {
+				dateAdapter.setSeclection(selectPostion);
+			}
+			this.flipper_day.setInAnimation(AnimationUtils.loadAnimation(this,R.anim.push_right_in));
+			this.flipper_day.setOutAnimation(AnimationUtils.loadAnimation(this,R.anim.push_right_out));
+			this.flipper_day.showPrevious();
+			flipper_day.removeViewAt(0);
+
+			weeks_nowBetween20140922--;
+			updateGridlayout(weeks_nowBetween20140922, timeListGrid);
+			main_topbar_spinner.setText(MyTimeUtil.getTheWeekStrMonthAndDay(weeks_nowBetween20140922));
+
+			/*
+			 * 更新顶部的下拉列表
+			 */
+			/* setTopBarSpinnerItems(); */
+			return true;
+		}
+		return false;
 	}
 	
 	private void initTopBar() {
@@ -614,7 +635,7 @@ public class TableMainActivity extends Activity implements OnGestureListener {
 							day_c = Integer.parseInt(currentDate.split("-")[2]);
 							currentYear = year_c;
 							currentMonth = month_c;
-							sc = new SpecialCalendar();
+							specialCalendar = new SpecialCalendar();
 							getCalendar(year_c, month_c);
 							week_num = getWeeksOfMonth();
 							currentNum = week_num;
@@ -633,7 +654,8 @@ public class TableMainActivity extends Activity implements OnGestureListener {
 							}
 							currentWeek = week_c;
 							getCurrent();
-							dateAdapter = new DateAdapter(TableMainActivity.this,getResources(), currentYear, currentMonth,currentWeek, currentNum, selectPostion,currentWeek == 1 ? true : false);
+//							dateAdapter = new DateAdapter(TableMainActivity.this,getResources(), currentYear, currentMonth,currentWeek, currentNum, selectPostion,currentWeek == 1 ? true : false);
+							dateAdapter = new DateAdapter(TableMainActivity.this, currentYear, currentMonth,currentWeek, currentNum, selectPostion,currentWeek == 1 ? true : false);
 							flipper_day.removeViewAt(0);
 						    addGridView();
 							dayNumbers = dateAdapter.getDayNumbers();
@@ -663,11 +685,24 @@ public class TableMainActivity extends Activity implements OnGestureListener {
 			datePickerDialog.show();
 		}
 	}
+
+	 /**
+     * 根据手机的分辨率从 dp 的单位 转成为 px(像素)
+     * 
+     * dp=dip,不同手机显示效果不同，不依赖像素，
+     * px不同设备显示效果一样
+     * sp: scaled pixels(放大像素). 主要用于字体显示best for textsize
+     */
+	public int dipTopx(Context context, float pxValue) {
+
+		final float scale = context.getResources().getDisplayMetrics().density;
+		return (int) (pxValue * scale + 0.5f);
+	}
 	
 	public void getCalendar(int year, int month) {
-		isLeapyear = sc.isLeapYear(year); // 是否为闰年
-		daysOfMonth = sc.getDaysOfMonth(isLeapyear, month); // 某月的总天数
-		dayOfWeek = sc.getWeekdayOfMonth(year, month); // 某月第一天为星期几
+		isLeapyear = specialCalendar.isLeapYear(year); // 是否为闰年
+		daysOfMonth = specialCalendar.getDaysOfMonth(isLeapyear, month); // 某月的总天数
+		dayOfWeek = specialCalendar.getWeekdayOfMonth(year, month); // 某月第一天为星期几
 	}
 	
 	public int getWeeksOfMonth() {
@@ -694,7 +729,7 @@ public class TableMainActivity extends Activity implements OnGestureListener {
 		// 先判断某月的第一天为星期几
 		int preMonthRelax = 0;
 		int dayFirst = getWhichDayOfWeek(year, month);
-		int days = sc.getDaysOfMonth(sc.isLeapYear(year), month);
+		int days = specialCalendar.getDaysOfMonth(specialCalendar.isLeapYear(year), month);
 		if (dayFirst != 7) {
 			preMonthRelax = dayFirst;
 		}
@@ -708,6 +743,20 @@ public class TableMainActivity extends Activity implements OnGestureListener {
 	}
 	
 	/**
+	 * 
+	 * @param year
+	 * @param month
+	 */
+	public int getLastDayOfWeek(int year, int month) {
+		return specialCalendar.getWeekDayOfLastMonth(year, month,specialCalendar.getDaysOfMonth(isLeapyear, month));
+	}
+
+	@Override
+	public boolean onTouchEvent(MotionEvent event) {
+		return this.gestureDetector.onTouchEvent(event);
+	}
+	
+	/**
 	 * 判断某年某月的第一天为星期几
 	 * 
 	 * @param year
@@ -715,7 +764,7 @@ public class TableMainActivity extends Activity implements OnGestureListener {
 	 * @return
 	 */
 	public int getWhichDayOfWeek(int year, int month) {
-		return sc.getWeekdayOfMonth(year, month);
+		return specialCalendar.getWeekdayOfMonth(year, month);
 	}
 	
 	/**
@@ -752,7 +801,7 @@ public class TableMainActivity extends Activity implements OnGestureListener {
 				currentYear--;
 			}
 			currentNum = getWeeksOfMonth(currentYear, currentMonth);
-			int firstDayOfWeek = sc.getWeekdayOfMonth(currentYear,
+			int firstDayOfWeek = specialCalendar.getWeekdayOfMonth(currentYear,
 					currentMonth + 1);
 			if (firstDayOfWeek == 0) {
 				// 如果上月第一天是星期日:0,则当前周变成上个月最后一周 =currentNum
@@ -764,28 +813,19 @@ public class TableMainActivity extends Activity implements OnGestureListener {
 
 	}
 	
-	/**
-	 * 
-	 * @param year
-	 * @param month
-	 */
-	public int getLastDayOfWeek(int year, int month) {
-		return sc.getWeekDayOfLastMonth(year, month,sc.getDaysOfMonth(isLeapyear, month));
+	
+	@Override
+	public boolean dispatchTouchEvent(MotionEvent ev) {
+		TableMainActivity.this.gestureDetector.onTouchEvent(ev);
+		return super.dispatchTouchEvent(ev);
 	}
 
-	
 	/**
 	 * onDown -> onSingleTapUp 方法都是继承自OnGestureListener 
 	 */
 	
 	@Override
 	public boolean onDown(MotionEvent arg0) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean onFling(MotionEvent arg0, MotionEvent arg1, float arg2,float arg3) {
 		// TODO Auto-generated method stub
 		return false;
 	}
@@ -813,6 +853,4 @@ public class TableMainActivity extends Activity implements OnGestureListener {
 		// TODO Auto-generated method stub
 		return false;
 	}
-
-	
 }

@@ -31,7 +31,7 @@
         android:layout_toRightOf="@+id/main_title_spinner"
         android:gravity="center"
         android:src="@drawable/sanjiao" />
-
+<!-- 
     <ImageView
         android:id="@+id/main_right_tx"
         android:layout_width="35dp"
@@ -40,7 +40,7 @@
         android:layout_centerVertical="true"
         android:layout_marginRight="10dp"
         android:src="@drawable/jiahao" />
-
+ -->
     <TextView
         android:layout_width="match_parent"
         android:layout_height="0.3dp"
